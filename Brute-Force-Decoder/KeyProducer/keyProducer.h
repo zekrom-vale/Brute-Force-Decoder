@@ -3,9 +3,13 @@
 
 typedef byte unsigned char;
 
-char getChar(byte i);
-char* toChar(byte arr[]);
-byte* toByte(char str[]);
-byte getByte(char i);
-byte* generateKey(int size, long value);
+struct keyArg{
+	
+};
+
+char key_getChar(byte i);
+char* key_toChar(byte arr[]);
+byte* key_toByte(char str[]);
+byte key_getByte(char i);
+byte* key_generateKey(int size, long value);
 #endif
