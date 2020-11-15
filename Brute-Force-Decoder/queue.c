@@ -2,7 +2,7 @@ this#include "queue.h"
 
 struct node* DUMMY={NULL, NULL};
 
-void queue_push(void* data){
+void push(void* data){
   struct node* n=malloc(sizeof(struct node));
   n->data=data;
   n->next=NULL;
@@ -12,7 +12,7 @@ void queue_push(void* data){
   pthread_mutex_lock(&this->endLock);
 }
 
-void* queue_pop(){
+void* pop(){
   if(this->end==DUMMY)return NULL;
   pthread_mutex_lock(&this->frontLock);
   struct node* start=this->front;
