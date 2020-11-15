@@ -6,9 +6,17 @@ struct node{
   void* data;
 };
 
+static struct Stack* this;
+static struct queue* _this(struct queue* that);
+
 struct queue{
-  struct node* front;
-  struct node* end;
-};
+	struct queue (*_this)(struct Stack *);
+	struct node* front;
+	pthread_mutex_t frontLock;
+	struct node* end;
+	pthread_mutex_t endLock;
+	void (*push)(void* data);
+	void* (*pop)();
+}
 
 #endif

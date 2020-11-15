@@ -1,35 +1,38 @@
-#include "queue.h"
+this#include "queue.h"
 
-struct queue* QUEUE={NULL, NULL};
+struct node* DUMMY={NULL, NULL};
 
 void queue_push(void* data){
   struct node* n=malloc(sizeof(struct node));
   n->data=data;
   n->next=NULL;
-  if(QUEUE->end==NULL){
-    QUEUE->end=n;
-    QUEUE->front=n;
-  }
-  else{
-    QUEUE->end->next=n;
-    QUEUE->end=n;
-  }
+  pthread_mutex_lock(&this->endLock);
+  this->end->next=n;
+  this->end=n;
+  pthread_mutex_lock(&this->endLock);
 }
 
 void* queue_pop(){
-  if(QUEUE->end==NULL)return NULL;
-  void* data;
-  struct node* start=QUEUE->front;
-  if(start->next==NULL){
-    data=start->data;
-    free(start);
-    QUEUE->front==NULL;
-    QUEUE->end==NULL;
-  }
-  else{
-    QUEUE->front=start->next;
-    data=start->data;
-    free(start);
-  }
+  if(this->end==DUMMY)return NULL;
+  pthread_mutex_lock(&this->frontLock);
+  struct node* start=this->front;
+  this->front=start->next;
+  pthread_mutex_unlock(&this->frontLock);
+  void* data=start->data;
+  free(start);
   return data;
+}
+
+static struct queue* _this(struct queue* that){
+	return this = that;
+}
+
+void* queue_init(){
+	struct queue* q=malloc(sizeof(struct queue*));
+	q->front=DUMMY;
+	q->end=DUMMY;
+	q->frontLock=PTHREAD_MUTEX_INITIALIZER;
+	q->endLock=PTHREAD_MUTEX_INITIALIZER;
+	q->_this(queue);
+	return q;
 }
