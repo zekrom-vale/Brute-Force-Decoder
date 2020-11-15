@@ -1,5 +1,5 @@
-struct queue* keyQueue;
-struct queue* textQueue;
+struct queue* keyQueue=queue_init();
+struct queue* textQueue=queue_init();
 
 pthread_t keyProducers[N_KEYS];
 pthread_t validators[N_VALS];

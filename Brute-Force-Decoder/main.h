@@ -11,7 +11,12 @@
 #define N_DECS 3;
 #define N_VALS 6;
 
-struct queue* keyQueue=queue_init();
-struct queue* textQueue=queue_init();
+
+extern pthread_t keyProducers[N_KEYS];
+extern pthread_t validators[N_VALS];
+extern pthread_t decoders[N_DECS];
+
+extern struct queue* keyQueue;
+extern struct queue* textQueue;
 
 #endif
