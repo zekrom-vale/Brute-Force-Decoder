@@ -17,6 +17,13 @@ extern pthread_t validators[N_VALS];
 extern pthread_t decoders[N_DECS];
 
 extern struct queue* keyQueue;
+#define KEY_MAX 40
+extern sem_t semKey;
+extern sem_t semKeyMax;
+
 extern struct queue* textQueue;
+#define TEXT_MAX 20
+extern sem_t semText;
+extern sem_t semTextMax;
 
 #endif
