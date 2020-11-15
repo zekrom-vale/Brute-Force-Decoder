@@ -26,8 +26,10 @@ byte key_getByte(char i){
   if(0x41<=i&&i<=0x5A)return i-0x41+10;
 }
 
+
+
 #define AMT 36
-byte* key_generateKey(int size, long value){
+byte* key_generateKey(int size, unsiged long long value){
 	assert(size>0);
   byte* arr= calloc(size, (size_t)size);
   for(int i=0; i<size; i++){
@@ -39,8 +41,13 @@ byte* key_generateKey(int size, long value){
 
 void* key_main(void* v){
 	struct keyArgs* args=v;
-
-
+	for(unsigned long long i=0; i<args->max){
+#if KEY_MAX!=0
+		sem_wait(&semKeyMax);
+#endif
+		keyQueue->push(key_generateKey(args->size, i));
+		sem_post(&semKey);
+	}
 	free(args);
 	return NULL;
 }

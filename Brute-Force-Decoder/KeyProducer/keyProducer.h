@@ -4,7 +4,8 @@
 typedef byte unsigned char;
 
 struct keyArg{
-	
+	unsiged long long max;
+	int size;
 };
 
 char key_getChar(byte i);
