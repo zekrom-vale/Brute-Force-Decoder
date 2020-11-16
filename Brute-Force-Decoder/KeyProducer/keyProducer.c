@@ -28,24 +28,27 @@ byte key_getByte(char i){
 
 
 
-#define AMT 36
-byte* key_generateKey(int size, unsiged long long value){
-	assert(size>0);
-  byte* arr= calloc(size, (size_t)size);
-  for(int i=0; i<size; i++){
-    arr[i]=value%(AMT+1);
-    value/=AMT;
-  }
-  return arr;
+byte* key_generateKey(byte* arr, size_t size){
+	/*byte* clone=calloc(size, sizeof(byte));
+	byte* cur=arr;
+	byte* curClone=clone;
+	while(cur<arr+size){
+		*(curClone++)=*(cur++);
+	}
+	return clone;
+	*/
+	return memcpy(calloc(size, sizeof(byte), arr, size));
 }
 
 void* key_main(void* v){
 	struct keyArgs* args=v;
-	for(unsigned long long i=0; i<args->max){
+	byte arr[args->size];
+	arr[0]=args->start;
+	while(byte_array_inc(arr, args->num, args->size)){
 #if KEY_MAX!=0
 		sem_wait(&semKeyMax);
 #endif
-		keyQueue->push(key_generateKey(args->size, i));
+		keyQueue->push(key_generateKey(arr, args->size));
 		sem_post(&semKey);
 	}
 	free(args);
