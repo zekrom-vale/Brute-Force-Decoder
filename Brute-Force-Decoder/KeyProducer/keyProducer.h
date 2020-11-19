@@ -1,6 +1,7 @@
 #ifndef KEY_PRODUCER_H
 #define KEY_PRODUCER_H
 #include "byteArray.h"
+#include <stdlib.h>
 
 typedef byte unsigned char;
 
