@@ -5,7 +5,7 @@
 typedef byte unsigned char;
 
 struct keyArg{
-	unsiged long long max;
+	int num;
 	int size;
 };
 

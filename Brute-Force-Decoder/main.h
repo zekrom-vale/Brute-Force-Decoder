@@ -11,6 +11,8 @@
 #define N_DECS 3;
 #define N_VALS 6;
 
+#define KEY_SIZE 256;
+
 
 extern pthread_t keyProducers[N_KEYS];
 extern pthread_t validators[N_VALS];
