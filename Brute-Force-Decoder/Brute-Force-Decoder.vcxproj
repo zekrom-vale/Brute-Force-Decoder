@@ -83,6 +83,24 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="Decoder\decoder.c" />
+    <ClCompile Include="KeyProducer\byteArray.c" />
+    <ClCompile Include="KeyProducer\keyProducer.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="queue.c" />
+    <ClCompile Include="Util\bitarray.c" />
+    <ClCompile Include="Validator\validator.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Decoder\decoder.h" />
+    <ClInclude Include="KeyProducer\byteArray.h" />
+    <ClInclude Include="KeyProducer\keyProducer.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="queue.h" />
+    <ClInclude Include="Validator\validator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
