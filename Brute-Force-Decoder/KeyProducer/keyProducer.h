@@ -1,18 +1,16 @@
 #ifndef KEY_PRODUCER_H
 #define KEY_PRODUCER_H
 #include "byteArray.h"
+#include "../main.h"
 #include <stdlib.h>
 
-typedef byte unsigned char;
+typedef unsigned char byte;
 
 struct keyArg{
 	int num;
 	int size;
+	int start;
 };
 
-char key_getChar(byte i);
-char* key_toChar(byte arr[]);
-byte* key_toByte(char str[]);
-byte key_getByte(char i);
-byte* key_generateKey(int size, long value);
+byte* key_generateKey(byte* arr, size_t size);
 #endif
