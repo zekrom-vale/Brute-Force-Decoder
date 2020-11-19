@@ -53,3 +53,8 @@ dkms.conf
 
 # IDEA IDE configuration files
 *.idea
+
+# VS
+.vs
+bin
+obj
