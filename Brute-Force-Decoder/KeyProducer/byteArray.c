@@ -5,21 +5,21 @@
 * @param inc the value to incriment by
 * @param size the size of the array
 */
-
-bool byte_array_inc(byte* arr, byte inc, size_t size){
+bool byte_array_inc(byte* arr, int inc, size_t size){
 	assert(inc>0);
-	//Requires more logic and not needed
-	assert(inc<2*MAX-1);
 	//Add the value
-	*arr+=inc;
+	int val=((int)*arr)+(int)inc;
 	//If there is overflow roll it over
-	if(*arr>MAX)*arr%=(MAX+1);
+	if(val<=MAX)return true;
 
-	else return true;
+	*arr=val%(MAX+1);
+	int overflow=val/MAX;
 	for(int i=1; i<size; i++){
 		//Add the overflow
-		if(++*(arr+i)>MAX)*(arr+i)%=(MAX+1);
-		else return true;
+		val=(int)(*(arr+i))+overflow;
+		if(val<=MAX)return true;
+		*(arr+i)=val%(MAX+1);
+		overflow=val/MAX;
 	}
 	return false;
 }

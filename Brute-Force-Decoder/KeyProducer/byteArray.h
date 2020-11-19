@@ -8,4 +8,6 @@
 typedef unsigned char byte;
 #define MAX sizeof(byte);
 
+bool byte_array_inc(byte* arr, int inc, size_t size);
+
 #endif
