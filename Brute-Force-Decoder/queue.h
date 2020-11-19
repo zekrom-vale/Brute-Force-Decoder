@@ -1,5 +1,6 @@
 #ifndef LOCKED_QUEUE_H
 #define LOCKED_QUEUE_H
+#include <pthread.h>
 
 struct node{
   struct node* next;

@@ -13,7 +13,8 @@ void push(void* data){
 }
 
 void* pop(){
-  if(this->end==DUMMY)return NULL;
+	assert(this!=NULL);
+  if(this->front==DUMMY)return NULL;
   pthread_mutex_lock(&this->frontLock);
   struct node* start=this->front;
   this->front=start->next;
