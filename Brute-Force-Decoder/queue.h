@@ -1,8 +1,8 @@
 #ifndef LOCKED_QUEUE_H
 #define LOCKED_QUEUE_H
 #include <pthread.h>
-#include <unistd.h> 
 #include <stdlib.h> 
+#include <assert.h>
 
 struct node{
 	struct node* next;
@@ -10,6 +10,7 @@ struct node{
 };
 
 struct queue{
+	struct node* DUMMY;
 	struct node* front;
 	pthread_mutex_t frontLock;
 	struct node* end;
