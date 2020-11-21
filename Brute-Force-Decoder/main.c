@@ -1,8 +1,10 @@
-struct queue* keyQueue=queue_init();
+#include "main.h"
+
+struct queue* keyQueue;
 sem_t semKey;
 sem_t semKeyMax;
 
-struct queue* textQueue=queue_init();
+struct queue* textQueue;
 sem_t semText;
 sem_t semTextMax;
 
@@ -17,13 +19,15 @@ pthread_t decoders[N_DECS];
  * @param f the function to call
  * @param args arguments to pass to the function as as
  */
-void main_create(pthread* arr, int size, void* (f*)(void*), void* args[]){
+void main_create(pthread_t* arr, int size, void* (*f)(void*), void* args[]){
 		for(int i=0; i<size; i++){
 			pthread_create(arr+i, NULL, f, args==NULL?NULL:args[i]);
 		}
 }
 
 int main(){
+	keyQueue=queue_init();
+	textQueue=queue_init();
 	sem_init(&semKey, 0, 0);
 	sem_init(&semKeyMax, 0, KEY_MAX);
 
@@ -32,15 +36,15 @@ int main(){
 
 	//Create key producers
 	//No need to keep te array as we will only pass the args
-	struct keyArgs* keys[N_KEYS];
+	struct keyArg* keys[N_KEYS];
 	for(int i=0; i<N_KEYS; i++){
 		//Malloc the arguments
-		keyArgs[i]=malloc(sizeof(struct keyArgs));
-		keyArgs[i]->num=N_KEYS;
-		keyArgs[i]->start=i;
-		keyArgs[i]->size=KEY_SIZE;
+		keys[i]=malloc(sizeof(struct keyArg));
+		keys[i]->num=N_KEYS;
+		keys[i]->start=i;
+		keys[i]->size=KEY_SIZE;
 	}
-	main_create(&keyProducers, N_KEYS, &key_producer_main, keyArgs);
+	main_create(&keyProducers, N_KEYS, &key_main, keys);
 
 	//Create decoders
 	main_create(&decoders, N_DECS, &decoder_main, NULL);

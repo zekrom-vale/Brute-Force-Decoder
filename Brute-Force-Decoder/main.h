@@ -6,12 +6,13 @@
 #include "KeyProducer/keyProducer.h"
 #include "Validator/validator.h"
 #include <pthread.h>
+#include <semaphore.h>
 
-#define N_KEYS 1;
-#define N_DECS 3;
-#define N_VALS 6;
+#define N_KEYS 1
+#define N_DECS 3
+#define N_VALS 6
 
-#define KEY_SIZE 256;
+#define KEY_SIZE 256
 
 
 extern pthread_t keyProducers[N_KEYS];
