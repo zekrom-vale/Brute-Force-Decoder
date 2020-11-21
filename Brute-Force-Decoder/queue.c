@@ -129,3 +129,92 @@ void queue_destroy(struct queue* this){
 	//free
 	free(this);
 }
+
+/** 
+ * @param this the queue to loop through
+ * @param f the function to execute per value
+ * void f(int i, void* data)
+ *	@param i the current index of the data
+ *	@param data the data in the current node
+ */
+void queue_forEach(struct queue* this, void (*f)(int i, void* data)){
+	int i=0;
+	for(
+		struct node* cur=this->front->next;
+		cur!=NULL;
+		cur=cur->next
+	){
+		f(i++, cur->data);
+	}
+}
+
+/** 
+ * Creates an itterator for the given queue
+ * Automaticaly locks the queue until no nodes are left or queue_temrmenateIttorator is called
+ * @param this the queue to create the ittorator for
+ * 
+ * struct queue* q=queue_init();
+ * 
+ * //Queue adding/removing stuff
+ * 
+ * //Make itterator
+ * struct queue_ittorator* itt=queue_getIttorator(q);
+ * while(queue_hasNext(itt)){
+ *		int i=(int)queue_getNext(itt);
+ *		printf("%d", i);
+ *		if(i<0)break;
+ * }
+ * //Cleen up
+ * queue_temrmenateIttorator(itt);
+ */
+struct queue_ittorator* queue_getIttorator(struct queue* this){
+	assert(this!=NULL);
+	struct queue_ittorator* itt=malloc(sizeof(struct queue_ittorator));
+	itt->this=this;
+	assert(this->front==this->DUMMY);
+	queue_lockEnd(this);
+	queue_lockFront(this);
+	itt->lock=true;
+	itt->cur=this->front->next;
+	return itt;
+}
+
+/**
+ * Terminates the lock
+ * @param itt the itterator to stop and unlock
+ * @return true if it was locked
+ * @return false if it is unlocked
+ */
+bool queue_temrmenateIttorator(struct queue_ittorator* itt){
+	if(!itt->lock)return false;
+	queue_unlockEnd(itt->this);
+	queue_unlockFront(itt->this);
+	itt->lock=false;
+	return true;
+}
+
+/**
+ * Does the queue have a next node
+ * @param itt the ittrator to check
+ * @return true if there is more data
+ * @return false if the current is NULL
+ */
+bool queue_hasNext(struct queue_ittorator* itt){
+	assert(itt!=NULL);
+	bool n=itt->cur!=NULL;
+	if(!n)queue_temrmenateIttorator(itt);
+	return n;
+}
+
+/**
+ * Gets the next data
+ * @param itt the itterator to get the next data
+ * @return the value of the node
+ */
+void* queue_getNext(struct queue_ittorator* itt){
+	assert(itt!=NULL);
+	assert(itt->cur!=NULL);
+	void* data=itt->cur->data;
+	itt->cur=itt->cur->next;
+	return data;
+}
