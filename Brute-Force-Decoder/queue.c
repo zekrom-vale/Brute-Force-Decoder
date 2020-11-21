@@ -27,6 +27,15 @@ void queue_lockFront(struct queue* this){
 }
 
 /**
+* Locks the queue, helps prevent deadlock
+* @param this the queue to lock
+*/
+void queue_lock(struct queue* this){
+	queue_lockFront(this);
+	queue_lockEnd(this);
+}
+
+/**
 * Unlocks the end of the queue
 * @param this the queue to unlock
 */
@@ -40,6 +49,15 @@ void queue_unlockEnd(struct queue* this){
 */
 void queue_unlockFront(struct queue* this){
 	assert(pthread_mutex_unlock(&(this->frontLock)));
+}
+
+/**
+* Unlocks the queue, helps prevent deadlock (well, not this one)
+* @param this the queue to unlock
+*/
+void queue_unlock(struct queue* this){
+	queue_unlockFront(this);
+	queue_unlockEnd(this);
 }
 
 /**
@@ -110,8 +128,7 @@ struct queue* queue_init(){
  * @param this the queue to destroy
  */
 void queue_destroy(struct queue* this){
-	queue_lockEnd(this);
-	queue_lockFront(this);
+	queue_lock(this);
 	//Loop through everything including the dummy node
 	for(struct node* cur=this->front; cur!=NULL;){
 		struct node* next=cur->next;
@@ -121,8 +138,7 @@ void queue_destroy(struct queue* this){
 	}
 	this->front=NULL;
 	this->end=NULL;
-	queue_unlockEnd(this);
-	queue_unlockFront(this);
+	queue_unlock(this);
 	//Destroy the locks
 	pthread_mutex_destroy(&(this->endLock));
 	pthread_mutex_destroy(&(this->frontLock));
@@ -134,18 +150,28 @@ void queue_destroy(struct queue* this){
  * @param this the queue to loop through
  * @param f the function to execute per value
  * void f(int i, void* data)
- *	@param i the current index of the data
- *	@param data the data in the current node
+ *		@param i the current index of the data
+ *		@param data the data in the current node
+ *		@return true to continue
+ *		@return false to stop
  */
-void queue_forEach(struct queue* this, void (*f)(int i, void* data)){
+void queue_forEach(struct queue* this, bool (*f)(int i, void* data)){
 	int i=0;
-	for(
-		struct node* cur=this->front->next;
-		cur!=NULL;
-		cur=cur->next
-	){
-		f(i++, cur->data);
+	queue_lockFront(this);
+	struct node* cur=this->front->next;
+	if(cur!=NULL){
+		while(cur->next!=NULL){
+			if(!f(i++, cur->data)){
+				queue_unlockFront(this);
+				return;
+			}
+			cur=cur->next;
+		}
+		queue_lockEnd(this);
+		f(i, cur->data);
+		queue_unlockEnd(this);
 	}
+	queue_unlockFront(this);
 }
 
 /** 
@@ -172,8 +198,7 @@ struct queue_ittorator* queue_getIttorator(struct queue* this){
 	struct queue_ittorator* itt=malloc(sizeof(struct queue_ittorator));
 	itt->this=this;
 	assert(this->front==this->DUMMY);
-	queue_lockEnd(this);
-	queue_lockFront(this);
+	queue_lock(this);
 	itt->lock=true;
 	itt->cur=this->front->next;
 	return itt;
@@ -187,8 +212,7 @@ struct queue_ittorator* queue_getIttorator(struct queue* this){
  */
 bool queue_temrmenateIttorator(struct queue_ittorator* itt){
 	if(!itt->lock)return false;
-	queue_unlockEnd(itt->this);
-	queue_unlockFront(itt->this);
+	queue_unlock(itt->this);
 	itt->lock=false;
 	return true;
 }
