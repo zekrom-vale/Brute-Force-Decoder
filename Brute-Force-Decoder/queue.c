@@ -15,6 +15,7 @@
  * @param this the queue to lock
  */
 void queue_lockEnd(struct queue* this){
+	assert(this);
 	assert(!pthread_mutex_lock(&(this->endLock)));
 }
 
@@ -23,6 +24,7 @@ void queue_lockEnd(struct queue* this){
 * @param this the queue to lock
 */
 void queue_lockFront(struct queue* this){
+	assert(this);
 	assert(!pthread_mutex_lock(&(this->frontLock)));
 }
 
@@ -47,6 +49,7 @@ void swap(void** A, void** B){
  * @param this the queue to aquire the lock for
  */
 void queue_inversionLock(struct queue* this){
+	assert(this);
 	pthread_mutex_t* toLock=&(this->frontLock);
 	pthread_mutex_t* locked=&(this->endLock);
 	while(true){
@@ -69,6 +72,7 @@ void queue_inversionLock(struct queue* this){
 * @param this the queue to unlock
 */
 void queue_unlockEnd(struct queue* this){
+	assert(this);
 	assert(!pthread_mutex_unlock(&(this->endLock)));
 }
 
@@ -77,6 +81,7 @@ void queue_unlockEnd(struct queue* this){
 * @param this the queue to unlock
 */
 void queue_unlockFront(struct queue* this){
+	assert(this);
 	assert(!pthread_mutex_unlock(&(this->frontLock)));
 }
 
@@ -96,6 +101,7 @@ void queue_unlock(struct queue* this){
  * @param data the value to add
  */
 void queue_push(struct queue* this, void* data){
+	assert(this);
 	//Create the data
 	struct node* n=malloc(sizeof(struct node));
 	n->data=data;
@@ -112,7 +118,7 @@ void queue_push(struct queue* this, void* data){
 * @return the value of the removed node or `NULL` if none exist
 */
 void* queue_pop(struct queue* this){
-	assert(this!=NULL);
+	assert(this);
 	assert(this->front==this->DUMMY);
 	//Is there any data?
 	if(this->front->next==NULL)return NULL;
@@ -122,6 +128,7 @@ void* queue_pop(struct queue* this){
 	this->front->next=start->next;
 
 	//If the node to remove is at the end
+	//Set the flag and run it later
 	bool end=start->next==NULL;
 	queue_unlockFront(this);
 	if(end){
@@ -142,6 +149,7 @@ void* queue_pop(struct queue* this){
  * Initalizes the queue
  */
 struct queue* queue_init(){
+	//No need to lock as nothing else has access to the queue
 	struct queue* q=malloc(sizeof(struct queue*));
 	q->DUMMY=malloc(sizeof(struct node));
 	q->DUMMY->data=NULL;
@@ -150,8 +158,8 @@ struct queue* queue_init(){
 	q->front=q->DUMMY;
 	q->end=q->DUMMY;
 	//Create the locks
-	assert(pthread_mutex_init(&(q->frontLock), NULL));
-	assert(pthread_mutex_init(&(q->endLock), NULL));
+	assert(!pthread_mutex_init(&(q->frontLock), NULL));
+	assert(!pthread_mutex_init(&(q->endLock), NULL));
 	return q;
 }
 
@@ -160,6 +168,7 @@ struct queue* queue_init(){
  * @param this the queue to destroy
  */
 void queue_destroy(struct queue* this){
+	assert(this);
 	queue_lock(this);
 	//Loop through everything including the dummy node
 	for(struct node* cur=this->front; cur!=NULL;){
@@ -188,6 +197,7 @@ void queue_destroy(struct queue* this){
  *		@return false to stop
  */
 void queue_forEach(struct queue* this, bool (*f)(int i, void* data)){
+	assert(this);
 	int i=0;
 	queue_lockFront(this);
 	struct node* cur=this->front->next;
@@ -230,7 +240,7 @@ void queue_forEach(struct queue* this, bool (*f)(int i, void* data)){
  * queue_temrmenateIttorator(itt);
  */
 struct queue_ittorator* queue_getIttorator(struct queue* this){
-	assert(this!=NULL);
+	assert(this);
 	struct queue_ittorator* itt=malloc(sizeof(struct queue_ittorator));
 	itt->this=this;
 	assert(this->front==this->DUMMY);
@@ -247,6 +257,7 @@ struct queue_ittorator* queue_getIttorator(struct queue* this){
  * @return false if it is unlocked
  */
 bool queue_temrmenateIttorator(struct queue_ittorator* itt){
+	assert(itt);
 	if(!itt->lock)return false;
 	queue_unlock(itt->this);
 	itt->lock=false;
@@ -260,7 +271,7 @@ bool queue_temrmenateIttorator(struct queue_ittorator* itt){
  * @return false if the current is NULL
  */
 bool queue_hasNext(struct queue_ittorator* itt){
-	assert(itt!=NULL);
+	assert(itt);
 	bool n=itt->cur!=NULL;
 	if(!n)queue_temrmenateIttorator(itt);
 	return n;
@@ -272,8 +283,8 @@ bool queue_hasNext(struct queue_ittorator* itt){
  * @return the value of the node
  */
 void* queue_getNext(struct queue_ittorator* itt){
-	assert(itt!=NULL);
-	assert(itt->cur!=NULL);
+	assert(itt);
+	assert(itt->cur);
 	void* data=itt->cur->data;
 	itt->cur=itt->cur->next;
 	return data;
