@@ -35,6 +35,12 @@ void queue_lock(struct queue* this){
 	queue_lockEnd(this);
 }
 
+void swap(void** A, void** B){
+	void** T=B;
+	*A=*B;
+	*B=*T;
+}
+
 /**
  * Tries to aquire both locks, if it cannt it will wait in the locked queue without holding the other lock
  * This uses preemption, where others have priority
@@ -112,16 +118,19 @@ void* queue_pop(struct queue* this){
 	if(this->front->next==NULL)return NULL;
 	queue_lockFront(this);
 	struct node* start=this->front->next;
+	//Set the first node to the next one
+	this->front->next=start->next;
+
 	//If the node to remove is at the end
 	if(start->next==NULL){
+		queue_unlockFront(this);
 		//Lock the other side
 		queue_lockEnd(this);
 		//Update the end
 		this->end=this->DUMMY;
 		queue_unlockEnd(this);
 	}
-	this->front->next=start->next;
-	queue_unlockFront(this);
+	else queue_unlockFront(this);
 	//Extract the data
 	void* data=start->data;
 	//Free the node
@@ -190,11 +199,15 @@ void queue_forEach(struct queue* this, bool (*f)(int i, void* data)){
 			}
 			cur=cur->next;
 		}
+		//Done with the front
+		queue_unlockFront(this);
+
+		//Lock the end
 		queue_lockEnd(this);
 		f(i, cur->data);
 		queue_unlockEnd(this);
 	}
-	queue_unlockFront(this);
+	else queue_unlockFront(this);
 }
 
 /** 
