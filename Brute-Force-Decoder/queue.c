@@ -15,7 +15,7 @@
  * @param this the queue to lock
  */
 void queue_lockEnd(struct queue* this){
-	assert(pthread_mutex_lock(&(this->endLock)));
+	assert(!pthread_mutex_lock(&(this->endLock)));
 }
 
 /**
@@ -23,7 +23,7 @@ void queue_lockEnd(struct queue* this){
 * @param this the queue to lock
 */
 void queue_lockFront(struct queue* this){
-	assert(pthread_mutex_lock(&(this->frontLock)));
+	assert(!pthread_mutex_lock(&(this->frontLock)));
 }
 
 /**
@@ -36,11 +36,34 @@ void queue_lock(struct queue* this){
 }
 
 /**
+ * Tries to aquire both locks, if it cannt it will wait in the locked queue without holding the other lock
+ * This uses preemption, where others have priority
+ * @param this the queue to aquire the lock for
+ */
+void queue_inversionLock(struct queue* this){
+	pthread_mutex_t* toLock=&(this->frontLock);
+	pthread_mutex_t* locked=&(this->endLock);
+	while(true){
+		//Try to aquire the first lock
+		assert(!pthread_mutex_lock(locked));
+		//Try to aquire the other lock
+		if(!pthread_mutex_trylock(toLock))return;
+		//Failed so unlock as we do not need it
+		assert(!pthread_mutex_unlock(locked));
+		//Swap the locks
+		pthread_mutex_t* temp=toLock;
+		toLock=locked;
+		locked=temp;
+		//Loop around to wait in the locked queue
+	}
+}
+
+/**
 * Unlocks the end of the queue
 * @param this the queue to unlock
 */
 void queue_unlockEnd(struct queue* this){
-	assert(pthread_mutex_unlock(&(this->endLock)));
+	assert(!pthread_mutex_unlock(&(this->endLock)));
 }
 
 /**
@@ -48,7 +71,7 @@ void queue_unlockEnd(struct queue* this){
 * @param this the queue to unlock
 */
 void queue_unlockFront(struct queue* this){
-	assert(pthread_mutex_unlock(&(this->frontLock)));
+	assert(!pthread_mutex_unlock(&(this->frontLock)));
 }
 
 /**
