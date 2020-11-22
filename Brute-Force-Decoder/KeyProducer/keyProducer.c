@@ -22,7 +22,7 @@ void* key_main(void* v){
 #if KEY_MAX!=0
 		sem_wait(&semKeyMax);
 #endif
-		keyQueue->push(key_generateKey(arr, args->size));
+		queue_push(keyQueue, key_generateKey(arr, args->size));
 		sem_post(&semKey);
 	}
 	//Free the args and return
