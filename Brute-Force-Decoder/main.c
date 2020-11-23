@@ -12,6 +12,8 @@ pthread_t keyProducers[N_KEYS];
 pthread_t validators[N_VALS];
 pthread_t decoders[N_DECS];
 
+bool halt=false;
+
 /**
  * Creates new threads
  * @param arr the array of pthreads to create
@@ -26,8 +28,11 @@ void main_create(pthread_t* arr, int size, void* (*f)(void*), void* args[]){
 }
 
 int main(){
+	//Init queues
 	keyQueue=queue_init();
 	textQueue=queue_init();
+
+	//Init semaphores
 	sem_init(&semKey, 0, 0);
 	sem_init(&semKeyMax, 0, KEY_MAX);
 

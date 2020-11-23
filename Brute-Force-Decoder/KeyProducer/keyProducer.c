@@ -18,7 +18,7 @@ void* key_main(void* v){
 	byte arr[args->size];
 	arr[0]=args->start;
 	//Increment then push to the queue
-	while(byte_array_inc(arr, args->num, args->size)){
+	while(!halt&&byte_array_inc(arr, args->num, args->size)){
 #if KEY_MAX!=0
 		sem_wait(&semKeyMax);
 #endif

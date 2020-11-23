@@ -7,6 +7,7 @@
 #include "Validator/validator.h"
 #include <pthread.h>
 #include <semaphore.h>
+#include <stdbool.h>
 
 #define N_KEYS 1
 #define N_DECS 3
@@ -28,5 +29,7 @@ extern struct queue* textQueue;
 #define TEXT_MAX 20
 extern sem_t semText;
 extern sem_t semTextMax;
+
+extern bool halt;
 
 #endif
