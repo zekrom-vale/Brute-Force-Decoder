@@ -18,6 +18,11 @@ struct queue{
 	pthread_mutex_t endLock;
 };
 
+struct sizeWrapper{
+	size_t size;
+	void* arr;
+};
+
 void queue_push(struct queue* this, void* data);
 void* queue_pop(struct queue* this);
 struct queue* queue_init();

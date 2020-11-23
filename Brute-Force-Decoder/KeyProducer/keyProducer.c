@@ -1,7 +1,14 @@
 #include "keyProducer.h"
 
-byte* key_generateKey(byte* arr, size_t size){
-	return memcpy(calloc(size, sizeof(byte)), arr, size);
+struct sizeWrapper* key_generateKey(byte* arr, size_t size){
+	//copy array
+	byte* cpy=calloc(size, sizeof(byte));
+	memcpy(cpy, arr, size);
+	//wrap in wrapper
+	struct sizeWrapper* wpr=malloc(sizeof(struct sizeWrapper));
+	wpr->size=size;
+	wpr->arr=cpy;
+	return wpr;
 }
 
 /**
