@@ -17,6 +17,7 @@ pthread_t validators[N_VALS];
 pthread_t decoders[N_DECS];
 
 bool halt=false;
+char* cypherText;
 
 /**
  * Creates new threads
@@ -32,6 +33,7 @@ void main_create(pthread_t* arr, int size, void* (*f)(void*), void* args[]){
 }
 
 int main(){
+	cypherText=file_readAll(CYPHER_FILE);
 	//Init queues
 	keyQueue=queue_init();
 	textQueue=queue_init();
