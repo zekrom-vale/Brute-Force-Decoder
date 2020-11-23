@@ -49,8 +49,8 @@ extern sem_t semTextMax;
 
 extern bool halt;
 #ifndef CYPHER_FILE
-#define CYPHER_FILE cypher.txt
+#define CYPHER_FILE "cypher.txt"
 #endif
-extern char* cypherText;
+extern struct sizeWrapper* cypherText;
 
 #endif

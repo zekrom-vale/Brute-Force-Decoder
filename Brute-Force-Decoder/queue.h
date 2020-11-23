@@ -1,9 +1,10 @@
 #ifndef LOCKED_QUEUE_H
 #define LOCKED_QUEUE_H
 #include <pthread.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
+#include "Util/size.h"
 
 struct node{
 	struct node* next;
@@ -16,11 +17,6 @@ struct queue{
 	pthread_mutex_t frontLock;
 	struct node* end;
 	pthread_mutex_t endLock;
-};
-
-struct sizeWrapper{
-	size_t size;
-	void* arr;
 };
 
 void queue_push(struct queue* this, void* data);
