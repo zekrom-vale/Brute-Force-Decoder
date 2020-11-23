@@ -2,6 +2,7 @@
 #define KEY_PRODUCER_H
 #include "byteArray.h"
 #include "../main.h"
+#include "../queue.h"
 #include <stdlib.h>
 
 typedef unsigned char byte;
