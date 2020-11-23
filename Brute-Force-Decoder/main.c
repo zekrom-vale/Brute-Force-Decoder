@@ -2,11 +2,15 @@
 
 struct queue* keyQueue;
 sem_t semKey;
+#if KEY_MAX!=0
 sem_t semKeyMax;
+#endif
 
 struct queue* textQueue;
 sem_t semText;
+#if TEXT_MAX!=0
 sem_t semTextMax;
+#endif
 
 pthread_t keyProducers[N_KEYS];
 pthread_t validators[N_VALS];
@@ -34,11 +38,13 @@ int main(){
 
 	//Init semaphores
 	sem_init(&semKey, 0, 0);
+#if KEY_MAX!=0
 	sem_init(&semKeyMax, 0, KEY_MAX);
-
+#endif
 	sem_init(&semText, 0, 0);
+#if TEXT_MAX!=0
 	sem_init(&semTextMax, 0, TEXT_MAX);
-
+#endif
 	//Create key producers
 	//No need to keep te array as we will only pass the args
 	struct keyArg* keys[N_KEYS];

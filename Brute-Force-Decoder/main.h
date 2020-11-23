@@ -23,13 +23,16 @@ extern pthread_t decoders[N_DECS];
 extern struct queue* keyQueue;
 #define KEY_MAX 40
 extern sem_t semKey;
+#if KEY_MAX!=0
 extern sem_t semKeyMax;
+#endif
 
 extern struct queue* textQueue;
 #define TEXT_MAX 20
 extern sem_t semText;
+#if TEXT_MAX!=0
 extern sem_t semTextMax;
-
+#endif
 extern bool halt;
 
 #endif
