@@ -4,7 +4,7 @@ void* decoder_main(void* v){
 
 	while(!halt){
 		sem_wait(&semText);
-		queue_pop(textQueue);
+		char* text=queue_pop(textQueue);
 #if TEXT_MAX!=0
 		sem_post(&semTextMax);
 #endif
