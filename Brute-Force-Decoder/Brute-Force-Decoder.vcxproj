@@ -84,6 +84,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="Decoder\decoder.c" />
+    <ClCompile Include="file.c" />
     <ClCompile Include="KeyProducer\byteArray.c" />
     <ClCompile Include="KeyProducer\keyProducer.c" />
     <ClCompile Include="main.c" />
@@ -93,10 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Decoder\decoder.h" />
+    <ClInclude Include="file.h" />
     <ClInclude Include="KeyProducer\byteArray.h" />
     <ClInclude Include="KeyProducer\keyProducer.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="queue.h" />
+    <ClInclude Include="Util\size.h" />
     <ClInclude Include="Validator\validator.h" />
   </ItemGroup>
   <ItemGroup>

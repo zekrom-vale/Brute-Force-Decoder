@@ -25,12 +25,15 @@ void* key_main(void* v){
 	byte arr[args->size];
 	arr[0]=args->start;
 	//Increment then push to the queue
+	//Only if halt is false and inc does not run out
 	while(!halt&&byte_array_inc(arr, args->num, args->size)){
+		//Push the generated key into the queue
 #if KEY_MAX!=0
 		sem_wait(&semKeyMax);
 #endif
 		queue_push(keyQueue, key_generateKey(arr, args->size));
 		sem_post(&semKey);
+		//End push
 	}
 	//Free the args and return
 	free(args);

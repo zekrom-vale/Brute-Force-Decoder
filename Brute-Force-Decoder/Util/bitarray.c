@@ -1,5 +1,9 @@
+//THIS IS NOT USED
+
 #include <limits.h>
-typedef ulong unsigned long long;
+#include <stdbool.h>
+#include <stdlib.h>
+typedef unsigned long long ulong;
 
 bool bit_add(ulong arr[], ulong num){
 	ulong org;

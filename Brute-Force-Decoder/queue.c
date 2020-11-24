@@ -10,6 +10,10 @@
  * front -> DUMMY <- end
  */
 
+/*********************************
+ *           LOCKS
+ *********************************/
+
 /**
  * Locks the end of the queue
  * @param this the queue to lock
@@ -37,6 +41,20 @@ void queue_lock(struct queue* this){
 	queue_lockEnd(this);
 }
 
+/**
+ * EXPEREMENTAL
+ * Swapps the given varable pointer with the other
+ * WARNING Assumes that types are the same
+ * 
+ * ```
+ * char* a;
+ * char* b;
+ * Ex: swap(&a, &&b);
+ * ```
+ * 
+ * @param A The first pointer to swap
+ * @param B The second pointer to swap
+ */
 void swap(void** A, void** B){
 	void** T=B;
 	*A=*B;
@@ -56,7 +74,7 @@ void queue_inversionLock(struct queue* this){
 		//Try to aquire the first lock
 		assert(!pthread_mutex_lock(locked));
 		//Try to aquire the other lock
-		if(!pthread_mutex_trylock(toLock))return;
+		if(!pthread_mutex_trylock(toLock))return; //Aquired both locks return
 		//Failed so unlock as we do not need it
 		assert(!pthread_mutex_unlock(locked));
 		//Swap the locks
@@ -93,6 +111,10 @@ void queue_unlock(struct queue* this){
 	queue_unlockFront(this);
 	queue_unlockEnd(this);
 }
+
+/*********************************
+*             CORE
+*********************************/
 
 /**
  * Adds an item to the queue
@@ -187,6 +209,10 @@ void queue_destroy(struct queue* this){
 	free(this);
 }
 
+/*********************************
+*            LOOPS
+*********************************/
+
 /** 
  * @param this the queue to loop through
  * @param f the function to execute per value
@@ -201,13 +227,18 @@ void queue_forEach(struct queue* this, bool (*f)(int i, void* data)){
 	int i=0;
 	queue_lockFront(this);
 	struct node* cur=this->front->next;
+	//The flag to keep track if it stoped
 	bool flag=false;
 	if(cur!=NULL){
+		//While the next node is not null
 		while(cur->next!=NULL){
+			//Call the function then check the return value
 			if(!f(i++, cur->data)){
+				//If false exit
 				flag=true;
 				break;
 			}
+			//Continue to the next
 			cur=cur->next;
 		}
 	}
@@ -215,10 +246,15 @@ void queue_forEach(struct queue* this, bool (*f)(int i, void* data)){
 	if(flag)return;
 
 	//Lock the end
+	//Do it this way to only require one lock at a time
 	queue_lockEnd(this);
 	f(i, cur->data);
 	queue_unlockEnd(this);
 }
+
+/*********************************
+*       EXTRA ITTERATOR
+*********************************/
 
 /** 
  * Creates an itterator for the given queue

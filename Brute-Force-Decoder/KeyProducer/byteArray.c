@@ -6,20 +6,32 @@
 * @param size the size of the array
 */
 bool byte_array_inc(byte* arr, int inc, size_t size){
-	assert(inc>0);
+	assert(inc>0); //There is no support for decrementing
 	//Add the value
 	int val=((int)*arr)+(int)inc;
 	//If there is overflow roll it over
-	if(val<=MAX)return true;
-
+	if(val<=MAX){
+		*arr=val;
+		return true;
+	}
+	//Set the value that will fit
 	*arr=val%(MAX+1);
+	//Get the overflow for the next space
 	int overflow=val/MAX;
 	for(int i=1; i<size; i++){
 		//Add the overflow
 		val=(int)(*(arr+i))+overflow;
-		if(val<=MAX)return true;
+		//If there is no current overflow
+		if(val<=MAX){
+			//Set the value
+			*(arr+i)=val;
+			return true;
+		}
+		//Set the value that will fit
 		*(arr+i)=val%(MAX+1);
+		//Find the next oveflow value
 		overflow=val/MAX;
 	}
+	//Ran out of array space
 	return false;
 }
