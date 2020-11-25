@@ -6,6 +6,11 @@
 #include <stdbool.h>
 #include "Util/size.h"
 
+#ifndef INVERSION_LOCK
+#define INVERSION_LOCK true
+#endif
+
+
 struct node{
 	struct node* next;
 	void* data;

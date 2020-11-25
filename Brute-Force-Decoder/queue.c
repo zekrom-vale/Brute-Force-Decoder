@@ -1,4 +1,6 @@
 #include "queue.h"
+//This is private
+void queue_inversionLock(struct queue* this);
 
 /** 
  * front -> DUMMY -> [x] -> [x] -> [x] -> [x] <- end
@@ -37,8 +39,12 @@ void queue_lockFront(struct queue* this){
 * @param this the queue to lock
 */
 void queue_lock(struct queue* this){
+#if INVERSION_LOCK
+	queue_inversionLock(this);
+#else
 	queue_lockFront(this);
 	queue_lockEnd(this);
+#endif
 }
 
 /**
