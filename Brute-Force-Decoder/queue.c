@@ -186,8 +186,8 @@ struct queue* queue_init(){
 	q->front=q->DUMMY;
 	q->end=q->DUMMY;
 	//Create the locks
-	assert(!pthread_mutex_init(&(q->frontLock), NULL));
-	assert(!pthread_mutex_init(&(q->endLock), NULL));
+	mutext_init(&(q->frontLock));
+	mutext_init(&(q->endLock));
 	return q;
 }
 

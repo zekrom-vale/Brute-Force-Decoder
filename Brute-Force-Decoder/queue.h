@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include "Util/size.h"
+#include "Util/mutex.h"
 
 #ifndef INVERSION_LOCK
 #define INVERSION_LOCK true
