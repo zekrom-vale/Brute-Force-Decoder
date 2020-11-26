@@ -1,6 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include "Util/config.h"
 #include "queue.h"
 #include "file.h"
 #include "Decoder/decoder.h"

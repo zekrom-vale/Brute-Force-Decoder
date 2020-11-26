@@ -1,5 +1,6 @@
 #ifndef KEY_PRODUCER_H
 #define KEY_PRODUCER_H
+#include "../Util/config.h"
 #include "byteArray.h"
 #include "../main.h"
 #include "../queue.h"

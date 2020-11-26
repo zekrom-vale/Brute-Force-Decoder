@@ -90,6 +90,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="queue.c" />
     <ClCompile Include="Util\bitarray.c" />
+    <ClCompile Include="Util\mutex.c" />
     <ClCompile Include="Validator\validator.c" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +100,8 @@
     <ClInclude Include="KeyProducer\keyProducer.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="queue.h" />
+    <ClInclude Include="Util\config.h" />
+    <ClInclude Include="Util\mutex.h" />
     <ClInclude Include="Util\size.h" />
     <ClInclude Include="Validator\validator.h" />
   </ItemGroup>
