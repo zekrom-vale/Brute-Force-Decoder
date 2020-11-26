@@ -17,7 +17,7 @@ void mutext_init(pthread_mutex_t* mutex){
 #else
 	int ret=pthread_mutex_init(mutex, NULL);
 	if(!ret){
-		fprintf("Mutex failed to init mutex: %s", errno(ret));
+		fprintf("Mutex failed to init mutex: %s", strerror(ret));
 		exit(ret);
 	}
 #endif
