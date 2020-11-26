@@ -72,11 +72,11 @@ int main(){
 		keys[i]->size=KEY_SIZE;
 	}
 	//Create producers
-	main_create(&keyProducers, N_KEYS, &key_main, keys);
+	main_create(&keyProducers, N_KEYS, key_main, keys);
 	//Create decoders
-	main_create(&decoders, N_DECS, &decoder_main, NULL);
+	main_create(&decoders, N_DECS, decoder_main, NULL);
 	//Create validators
-	main_create(&validators, N_VALS, &validator_main, NULL);
+	main_create(&validators, N_VALS, validator_main, NULL);
 	//There is no reason to keep this main thread as we will not be joining
 	return 0;
 }
