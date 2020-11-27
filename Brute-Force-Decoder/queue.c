@@ -48,26 +48,6 @@ void queue_lock(struct queue* this){
 }
 
 /**
- * EXPEREMENTAL
- * Swapps the given varable pointer with the other
- * WARNING Assumes that types are the same
- * 
- * ```
- * char* a;
- * char* b;
- * Ex: swap(&a, &&b);
- * ```
- * 
- * @param A The first pointer to swap
- * @param B The second pointer to swap
- */
-void swap(void** A, void** B){
-	void** T=B;
-	*A=*B;
-	*B=*T;
-}
-
-/**
  * Tries to aquire both locks, if it cannt it will wait in the locked queue without holding the other lock
  * This uses preemption, where others have priority
  * @param this the queue to aquire the lock for
