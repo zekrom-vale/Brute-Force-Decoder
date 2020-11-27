@@ -4,5 +4,6 @@
 #include "../main.h"
 #include "../queue.h"
 #include <semaphore.h>
+#include "../Decoder/decoder.h"
 void* validator_main(void* args);
 #endif
