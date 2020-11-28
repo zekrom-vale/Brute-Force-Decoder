@@ -1,14 +1,40 @@
 #include "decoder.h"
 
+/**
+ * Copies the cypher text and sets up the size wrapper
+ * Also, sets the proper null terminator for strings `\0`
+ * @return The size wrapped copy of the cypher text to decode
+ */
+struct sizeWrapper* decode_copy(){
+	struct sizeWrapper* txt=malloc(sizeof(struct sizeWrapper));
+	size_t textSize=cypherText->size;
+	//Copy the text so we can modify the text itself
+	char* text=calloc(textSize+1, sizeof(byte));
+	memcpy(text, cypherText->arr, textSize);
+	//Add the `\0`
+	text[textSize]=0;
+	txt->arr=text;
+	txt->size=textSize+1;
+	return txt;
+}
+
 struct sizeWrapper* decode_decode(struct sizeWrapper* wrp){
 	//Unwrap
-	byte* arr=wrp->arr;
-	size_t size=wrp->size;
-	struct sizeWrapper* txt=malloc(sizeof(struct sizeWrapper));
+	byte* key=wrp->arr;
+	size_t keySize=wrp->size;
+	struct sizeWrapper* txt=decode_copy();
+	//Access with
+	//txt->arr
+	//txt->size (This now includes `\0`)
 	
+	//Literaly just apply the XOR to each character
+	//EXCEPT the last one, that must be `\0`
+	//You should be able to set that after if you want to
+		//But update the one above
+
 	//Decode
-	//txt->arr=text+\0
-	//txt->size=size+1
+
+
 
 	return txt;
 }
