@@ -37,13 +37,20 @@ struct sizeWrapper* cypherText;
  * @param f the function to call
  * @param args arguments to pass to the function as as
  */
-void main_create(pthread_t* arr, int size, void* (*f)(void*), void* args[]){
+void main_create(pthread_t* arr, int size, void* (*f)(void*), void* args[], pthread_attr_t* threadAttr){
 		for(int i=0; i<size; i++){
-			pthread_create(arr+i, NULL, f, args==NULL?NULL:args[i]);
+			pthread_create(arr+i, threadAttr, f, args==NULL?NULL:args[i]);
 		}
 }
 
 int main(){
+	pthread_attr_t threadAttr;
+	pthread_attr_init(&threadAttr);
+	pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);
+	pthread_attr_setguardsize(&threadAttr, GUARD_SIZE);
+	pthread_attr_setstacksize(&threadAttr, STACK_SIZE);
+	pthread_attr_setschedpolicy(&threadAttr, SCHED_RR);
+
 	//Set the cypherText by reading the file
 	cypherText=file_readAllRaw(CYPHER_FILE);
 	//Init queues
@@ -72,11 +79,16 @@ int main(){
 		keys[i]->size=KEY_SIZE;
 	}
 	//Create producers
-	main_create(&keyProducers, N_KEYS, key_main, keys);
+	main_create(&keyProducers, N_KEYS, key_main, keys, &threadAttr);
 	//Create decoders
-	main_create(&decoders, N_DECS, decoder_main, NULL);
+	main_create(&decoders, N_DECS, decoder_main, NULL, &threadAttr);
 	//Create validators
-	main_create(&validators, N_VALS, validator_main, NULL);
+	main_create(&validators, N_VALS, validator_main, NULL, &threadAttr);
 	//There is no reason to keep this main thread as we will not be joining
+	//Cannot join due to
+		//pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);
+
+	pthread_attr_destroy(&threadAttr);
+
 	return 0;
 }
