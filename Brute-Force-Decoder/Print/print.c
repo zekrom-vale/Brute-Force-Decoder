@@ -10,17 +10,15 @@ void print_key(FILE* file, struct sizeWrapper* key){
 	fprintf(file, "\n");
 }
 
-void print(struct keyTextWrap* keyText){
-	fprintf(OUT, "Found match:\n");
+void print(char* TRD, struct keyTextWrap* keyText){
+	print_core(TRD, "Found match:\n");
 	print_key(OUT, keyText->key);
 	fprintf(OUT, "%s\n", (char*)(keyText->text->arr));
-	fprintf(OUT, "Terminating...\n");
+	print_core(TRD, "Terminating...\n");
 }
 
-void print_id(char* TRD, char* txt){
-#if DBG
-	if(TRD==NULL)fprintf(OUT, "%4d %20s \n", 1, "Main");
-	else fprintf(OUT, "%4d %20s \n", pthread_self(), TRD);
-	fprintf(OUT, txt);
-#endif
+void print_core(char* TRD, char* txt){
+	if(TRD==NULL)fprintf(OUT, "%4d %20s ", 1, "Main");
+	else fprintf(OUT, "%4d %20s ", pthread_self(), TRD);
+	fprintf(OUT, "%s\n", txt);
 }

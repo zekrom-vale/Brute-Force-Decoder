@@ -6,6 +6,12 @@
 #include "../Util/config.h"
 #include "../Decoder/decoder.h"
 typedef unsigned char byte;
-void print_id(char* TRD, char* txt);
-void print(struct keyTextWrap* keyText);
+void print_core(char* TRD, char* txt);
+void print(char* TRD, struct keyTextWrap* keyText);
+#if DBG
+#define print_id(TRD, txt) print_core(TRD, txt)
+#else
+#define print_id(TRD, txt) ((void)0)
+#endif
+
 #endif
