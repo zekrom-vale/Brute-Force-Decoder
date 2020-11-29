@@ -44,6 +44,7 @@ void main_create(pthread_t* arr, int size, void* (*f)(void*), void* args[], pthr
 }
 
 int main(){
+	validator_init();
 	pthread_attr_t threadAttr;
 	pthread_attr_init(&threadAttr);
 	pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);

@@ -1,13 +1,26 @@
 #include "validator.h"
 
+regex_t wordRegex;
+regex_t invalRegex;
+
+void validator_init(){
+	//Create Regex
+	assert(!regcomp(&wordRegex, WORD_REG, REG_NOSUB|REG_ICASE|REG_EXTENDED));
+	assert(!regcomp(&invalRegex, INVAL_REG, REG_NOSUB|REG_EXTENDED));
+}
+
 bool validator_validator(struct keyTextWrap* keyText){
 	char* txt=keyText->text->arr;
 	size_t txtSize=keyText->text->size;
 	byte* key=keyText->key->arr;
 	size_t keySize=keyText->key->arr;
 
-	//Validate
-	return true||false;
+	if(txtSize!=strlen(txt))return false;
+
+	//Find invalid characters
+	if(regexec(&invalRegex, txt, 1, NULL, 0)!=REG_NOMATCH)return false;
+	//Find the word
+	return regexec(&wordRegex, txt, 1, NULL, 0)!=REG_NOMATCH;
 }
 
 void* validator_main(void* v){
