@@ -22,3 +22,7 @@
 #ifndef STACK_SIZE
 #define STACK_SIZE 0x10000U
 #endif
+
+#ifndef OUT
+#define OUT stdout
+#endif

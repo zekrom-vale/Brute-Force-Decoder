@@ -88,6 +88,7 @@
     <ClCompile Include="KeyProducer\byteArray.c" />
     <ClCompile Include="KeyProducer\keyProducer.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="Print\print.c" />
     <ClCompile Include="queue.c" />
     <ClCompile Include="Util\bitarray.c" />
     <ClCompile Include="Util\mutex.c" />

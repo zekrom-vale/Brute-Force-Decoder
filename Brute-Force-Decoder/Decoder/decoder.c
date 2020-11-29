@@ -1,4 +1,5 @@
 #include "decoder.h"
+#define TRD "Decoder"
 
 /**
  * Copies the cypher text and sets up the size wrapper
@@ -43,6 +44,8 @@ void* decoder_main(void* v){
 	//Standard thread start
 	struct decodeArgs* args=v;
 
+	print_id(TRD, "Starting Thread");
+
 	//Loop until told to stop
 	while(!halt){
 		//Fetch the key to decode
@@ -65,6 +68,8 @@ void* decoder_main(void* v){
 		sem_post(&semText);
 		//End put
 	}
+
+	print_id(TRD, "Ending Thread");
 
 	//Standard thread end
 	if(args)free(args);

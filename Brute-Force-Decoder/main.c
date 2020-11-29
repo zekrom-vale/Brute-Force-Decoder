@@ -1,4 +1,5 @@
 #include "main.h"
+#define TRD NULL
 
 //Key Producer - Decoder Communication
 struct queue* keyQueue;
@@ -53,24 +54,29 @@ int main(){
 	pthread_attr_setschedpolicy(&threadAttr, SCHED_RR);
 
 	//Set the cypherText by reading the file
+	print_id(TRD, "Reading Cypher");
 	cypherText=file_readAllRaw(CYPHER_FILE);
+	
 	//Init queues
+	print_id(TRD, "Creating queues");
 	keyQueue=queue_init();
 	textQueue=queue_init();
 
 	//Init semaphores
-	sem_init(&semKey, 0, 0);
+	print_id(TRD, "Creating semaphores");
+	assert(!sem_init(&semKey, 0, 0));
 #if KEY_MAX!=0
-	sem_init(&semKeyMax, 0, KEY_MAX);
+	assert(!sem_init(&semKeyMax, 0, KEY_MAX));
 #endif
 
-	sem_init(&semText, 0, 0);
+	assert(!sem_init(&semText, 0, 0));
 #if TEXT_MAX!=0
-	sem_init(&semTextMax, 0, TEXT_MAX);
+	assert(!sem_init(&semTextMax, 0, TEXT_MAX));
 #endif
 
 	//Create key producers
 	//No need to keep te array as we will only pass the args
+	print_if(TRD, "Setting Key Producer args");
 	struct keyArg* keys[N_KEYS];
 	for(int i=0; i<N_KEYS; i++){
 		//Malloc the arguments
@@ -79,11 +85,17 @@ int main(){
 		keys[i]->start=i;
 		keys[i]->size=KEY_SIZE;
 	}
+	
 	//Create producers
+	print_id(TRD, "Creating Key Producers");
 	main_create(&keyProducers, N_KEYS, key_main, keys, &threadAttr);
 	//Create decoders
+
+	print_id(TRD, "Creating Decoers");
 	main_create(&decoders, N_DECS, decoder_main, NULL, &threadAttr);
+
 	//Create validators
+	print_id(TRD, "Creating Validators");
 	main_create(&validators, N_VALS, validator_main, NULL, &threadAttr);
 	//There is no reason to keep this main thread as we will not be joining
 	//Cannot join due to
@@ -91,5 +103,6 @@ int main(){
 
 	pthread_attr_destroy(&threadAttr);
 
+	print_id(TRD, "Ending");
 	return 0;
 }

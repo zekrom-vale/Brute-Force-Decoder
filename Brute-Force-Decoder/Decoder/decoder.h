@@ -4,6 +4,7 @@
 #include "../main.h"
 #include "../queue.h"
 #include <semaphore.h>
+#include "../Print/print.h"
 void* decoder_main(void* args);
 
 struct keyTextWrap{

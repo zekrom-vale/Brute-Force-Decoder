@@ -1,4 +1,5 @@
 #include "keyProducer.h"
+#define TRD "Key Producer"
 
 struct sizeWrapper* key_generateKey(byte* arr, size_t size){
 	//copy array
@@ -21,6 +22,8 @@ void* key_main(void* v){
 	assert(v!=NULL);
 	struct keyArg* args=v;
 
+	print_id(TRD, "Created Thread");
+
 	//Create key used to ccreate all other keys
 	byte arr[args->size];
 	arr[0]=args->start;
@@ -37,5 +40,7 @@ void* key_main(void* v){
 	}
 	//Free the args and return
 	free(args);
+	if(!halt)print_id(TRD, "Ran out of keys");
+	print_id(TRD, "Ending Key Producer thread");
 	return NULL;
 }

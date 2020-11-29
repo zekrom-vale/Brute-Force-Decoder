@@ -1,4 +1,5 @@
 #include "validator.h"
+#define TRD "Validator"
 
 //Match the word given by WORD_REG
 regex_t wordRegex;
@@ -29,6 +30,8 @@ void* validator_main(void* v){
 	//Standard thread start
 	struct decodeArgs* args=v;
 
+	print_id(TRD, "Starting Thread");
+
 	//Loop until told to stop
 	while(!halt){
 		//Retreve text
@@ -52,6 +55,8 @@ void* validator_main(void* v){
 		free(keyText->key);
 		free(keyText);
 	}
+
+	print_id(TRD, "Ending Thread");
 
 	//Standard thread end
 	if(args)free(args);
