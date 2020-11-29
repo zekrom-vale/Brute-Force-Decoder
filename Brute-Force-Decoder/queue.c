@@ -136,16 +136,14 @@ void* queue_pop(struct queue* this){
 	this->front->next=start->next;
 
 	//If the node to remove is at the end
-	//Set the flag and run it later
-	bool end=start->next==NULL;
-	queue_unlockFront(this);
-	if(end){
+	if(start->next==NULL){
 		//Lock the other side
 		queue_lockEnd(this);
 		//Update the end
 		this->end=this->DUMMY;
 		queue_unlockEnd(this);
 	}
+	queue_unlockFront(this);
 	//Extract the data
 	void* data=start->data;
 	//Free the node
