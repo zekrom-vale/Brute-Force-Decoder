@@ -1,6 +1,8 @@
 #include "validator.h"
 
+//Match the word given by WORD_REG
 regex_t wordRegex;
+//Stop if txt has invalid ascii defined in INVAL_REG
 regex_t invalRegex;
 
 void validator_init(){

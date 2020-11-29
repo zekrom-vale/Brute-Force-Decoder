@@ -14,7 +14,7 @@ struct sizeWrapper* decode_copy(){
 	//Add the `\0`
 	text[textSize]=0;
 	txt->arr=text;
-	txt->size=textSize+1;
+	txt->size=textSize; //strlen does not inclue `\0`
 	return txt;
 }
 
