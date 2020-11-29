@@ -43,7 +43,7 @@ void* validator_main(void* v){
 		
 		if(validator_validator(keyText)){
 			halt=true;
-			//Print
+			print(keyText);
 		}
 		//Clean up
 		free(keyText->text->arr);

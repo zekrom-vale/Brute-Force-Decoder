@@ -7,6 +7,7 @@
 #include "../Decoder/decoder.h"
 #include <regex.h>
 #include <stdbool.h>
+#include "../Print/print.h"
 
 #ifndef WORD_REG
 #define WORD_REG "Russia"
