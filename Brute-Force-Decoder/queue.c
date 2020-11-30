@@ -136,11 +136,12 @@ void* queue_pop(struct queue* this){
 	this->front->next=start->next;
 
 	//If the node to remove is at the end
+	//Do this to prevent always locking as it can only expand
 	if(start->next==NULL){
 		//Lock the other side
 		queue_lockEnd(this);
-		//Update the end
-		this->end=this->DUMMY;
+		//Update the end only if next is still null (Prevent false positives)
+		if(start->next==NULL)this->end=this->DUMMY;
 		queue_unlockEnd(this);
 	}
 	queue_unlockFront(this);
