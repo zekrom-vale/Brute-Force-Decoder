@@ -38,9 +38,9 @@ struct sizeWrapper* cypherText;
  * @param f the function to call
  * @param args arguments to pass to the function as as
  */
-void main_create(pthread_t* arr, int size, void* (*f)(void*), void* args[], pthread_attr_t* threadAttr){
+void main_create(pthread_t* arr, int size, void* (*f)(void*), void** args, pthread_attr_t* threadAttr){
 		for(int i=0; i<size; i++){
-			pthread_create(arr+i, threadAttr, f, args==NULL?NULL:args[i]);
+			pthread_create((arr+i), threadAttr, f, args==NULL?NULL:args[i]);
 		}
 }
 
@@ -88,15 +88,15 @@ int main(){
 	
 	//Create producers
 	print_id(TRD, "Creating Key Producers");
-	main_create(&keyProducers, N_KEYS, key_main, keys, &threadAttr);
+	main_create(keyProducers, N_KEYS, key_main, (void**)keys, &threadAttr);
 	//Create decoders
 
 	print_id(TRD, "Creating Decoers");
-	main_create(&decoders, N_DECS, decoder_main, NULL, &threadAttr);
+	main_create(decoders, N_DECS, decoder_main, NULL, &threadAttr);
 
 	//Create validators
 	print_id(TRD, "Creating Validators");
-	main_create(&validators, N_VALS, validator_main, NULL, &threadAttr);
+	main_create(validators, N_VALS, validator_main, NULL, &threadAttr);
 	//There is no reason to keep this main thread as we will not be joining
 	//Cannot join due to
 		//pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);

@@ -20,21 +20,31 @@ def=-DN_KEYS=3 -DN_DECS=6 -DN_VALS=10
 option=$(lvl) $(opt) $(def) -std=c18
 
 obj=.o
-out=bruteForceDecider$(obj)
+out=bruteForceDecoder$(obj)
+
+files=\
+Decoder/decoder \
+KeyProducer/byteArray \
+KeyProducer/keyProducer \
+Print/print \
+Util/mutex \
+Validator/validator \
+file \
+main \
+queue
+
 
 #define obj files
-ofiles=$(bin)main$(obj) $(bin)queue$(obj) \
-$(bin)Decoder/decoder$(obj) $(bin)KeyProducer/byteArray$(obj) \
-$(bin)KeyProducer/keyProducer$(obj) $(bin)file$(obj) \
-$(bin)Validator/validator$(obj)
-#define c files for compile
-cfiles=main.c queue.c Decoder/decoder.c KeyProducer/byteArray.c \
-KeyProducer/keyProducer.c file.c Validator/validator.c
-#define h files to rquire
-hfiles=main.h queue.h Decoder/decoder.h KeyProducer/byteArray.h \
-KeyProducer/keyProducer.h file.h Validator/validator.h Util/size.h
+ofiles = $(foreach file, $(files), $(bin)$(file)$(obj))
 
-all: build run
+#define c files for compile
+cfiles = $(foreach file, $(files), $(file).c)
+#define h files to rquire
+hfiles = $(foreach file, $(files), $(file).h) \
+Util/config.h \
+Util/size.h
+
+all: build
 
 build: $(cfiles) $(hfiles)
 	$(gcc) $(cfiles) -o $(out) $(option) $(lib)

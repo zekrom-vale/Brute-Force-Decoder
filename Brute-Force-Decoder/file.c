@@ -44,6 +44,6 @@ struct sizeWrapper* file_readAllRaw(char* file){
 	struct sizeWrapper* str=malloc(sizeof(struct sizeWrapper));
 	//Save the char* to arr and pass size to store the size
 	//This time we keep the value
-	str->arr=file_readAllCore(file, true, str->size);
+	str->arr=file_readAllCore(file, true, &str->size);
 	return str;
 }

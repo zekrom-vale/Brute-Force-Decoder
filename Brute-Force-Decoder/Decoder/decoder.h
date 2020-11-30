@@ -5,6 +5,7 @@
 #include "../queue.h"
 #include <semaphore.h>
 #include "../Print/print.h"
+#include <string.h>
 void* decoder_main(void* args);
 
 struct keyTextWrap{

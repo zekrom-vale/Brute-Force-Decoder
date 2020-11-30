@@ -16,6 +16,6 @@ struct keyArg{
 	int start;
 };
 
-byte* key_generateKey(byte* arr, size_t size);
+struct sizeWrapper* key_generateKey(byte* arr, size_t size);
 void* key_main(void* v);
 #endif

@@ -16,7 +16,7 @@ bool validator_validator(struct keyTextWrap* keyText){
 	char* txt=keyText->text->arr;
 	size_t txtSize=keyText->text->size;
 	byte* key=keyText->key->arr;
-	size_t keySize=keyText->key->arr;
+	size_t keySize=keyText->key->size;
 
 	if(txtSize!=strlen(txt))return false;
 

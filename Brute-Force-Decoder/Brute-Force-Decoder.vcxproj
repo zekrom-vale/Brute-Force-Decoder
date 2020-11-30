@@ -82,6 +82,11 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
+    <RemoteCleanCommandLine>make clean</RemoteCleanCommandLine>
+    <RemoteBuildOutputs>~/projects/Brute-Force-Decoder/bruteForceDecoder.o</RemoteBuildOutputs>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="Decoder\decoder.c" />
     <ClCompile Include="file.c" />
@@ -90,7 +95,6 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="Print\print.c" />
     <ClCompile Include="queue.c" />
-    <ClCompile Include="Util\bitarray.c" />
     <ClCompile Include="Util\mutex.c" />
     <ClCompile Include="Validator\validator.c" />
   </ItemGroup>
@@ -100,6 +104,7 @@
     <ClInclude Include="KeyProducer\byteArray.h" />
     <ClInclude Include="KeyProducer\keyProducer.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Print\print.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="Util\config.h" />
     <ClInclude Include="Util\mutex.h" />
