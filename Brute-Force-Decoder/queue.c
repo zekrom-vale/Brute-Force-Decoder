@@ -129,6 +129,7 @@ void* queue_pop(struct queue* this){
 	assert(this);
 	assert(this->front==this->DUMMY);
 	//Is there any data?
+	//Even if a node is added before this check it will be complete and ready to use
 	if(this->front->next==NULL)return NULL;
 	queue_lockFront(this);
 	struct node* start=this->front->next;
