@@ -226,15 +226,16 @@ void queue_forEach(struct queue* this, bool (*f)(int i, void* data)){
 			//Continue to the next
 			cur=cur->next;
 		}
+		//We ignore any newly added nodes
+		//Could put the loop above in the critical section
+		if(!flag){
+			//Lock the end
+			queue_lockEnd(this);
+			f(i, cur->data);
+			queue_unlockEnd(this);
+		}
 	}
 	queue_unlockFront(this);
-	if(flag)return;
-
-	//Lock the end
-	//Do it this way to only require one lock at a time
-	queue_lockEnd(this);
-	f(i, cur->data);
-	queue_unlockEnd(this);
 }
 
 /*********************************
