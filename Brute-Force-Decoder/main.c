@@ -76,7 +76,7 @@ int main(){
 
 	//Create key producers
 	//No need to keep te array as we will only pass the args
-	print_if(TRD, "Setting Key Producer args");
+	print_id(TRD, "Setting Key Producer args");
 	struct keyArg* keys[N_KEYS];
 	for(int i=0; i<N_KEYS; i++){
 		//Malloc the arguments

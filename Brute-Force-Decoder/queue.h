@@ -28,6 +28,7 @@ struct queue{
 void queue_push(struct queue* this, void* data);
 void* queue_pop(struct queue* this);
 struct queue* queue_init();
+void queue_destroy(struct queue* this);
 
 struct queue_ittorator{
 	bool lock;
