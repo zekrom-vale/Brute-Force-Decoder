@@ -5,7 +5,7 @@
 * @param inc the value to incriment by
 * @param size the size of the array
 */
-bool byte_array_inc(byte* arr, int inc, size_t size){
+bool byte_array_inc(byte* arr, int inc, size_t size, size_t* prevSize){
 	assert(inc>0); //There is no support for decrementing
 	//Add the value
 	int val=((int)*arr)+inc;
@@ -25,6 +25,7 @@ bool byte_array_inc(byte* arr, int inc, size_t size){
 		if(val<=MAX){
 			//Set the value
 			*(arr+i)=val;
+			if(*prevSize<i+1)*prevSize=i+1;
 			return true;
 		}
 		//Set the value that will fit

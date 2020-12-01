@@ -41,14 +41,15 @@ void* key_main(void* v){
 	print_id(TRD, buff);
 	free(buff);
 #endif
+	size_t size=1;
 	//Increment then push to the queue
 	//Only if halt is false and inc does not run out
-	while(!halt&&byte_array_inc(arr, args->num, args->size)){
+	while(!halt&&byte_array_inc(arr, args->num, args->size, &size)){
 		//Push the generated key into the queue
 #if KEY_MAX!=0
 		sem_wait(&semKeyMax);
 #endif
-		queue_push(keyQueue, key_generateKey(arr, args->size));
+		queue_push(keyQueue, key_generateKey(arr, size));
 		sem_post(&semKey);
 		//End push
 	}
