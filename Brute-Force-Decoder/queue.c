@@ -114,11 +114,21 @@ void queue_push(struct queue* this, void* data){
 	struct node* n=malloc(sizeof(struct node));
 	n->data=data;
 	n->next=NULL;
+
+	bool fl=false;
+	if(this->front->next==NULL){
+		queue_lockFront(this);
+		if(this->front->next==NULL){
+			this->front->next=n;
+		};
+		fl=true;
+	}
 	//Add to the end
 	queue_lockEnd(this);
 	this->end->next=n;
 	this->end=n;
 	queue_unlockEnd(this);
+	if(fl)queue_unlockFront(this);
 }
 
 /**
@@ -133,19 +143,22 @@ void* queue_pop(struct queue* this){
 	if(this->front->next==NULL)return NULL;
 	queue_lockFront(this);
 	struct node* start=this->front->next;
-	//Set the first node to the next one
-	this->front->next=start->next;
+	if(start!=NULL){
+		//Set the first node to the next one
+		this->front->next=start->next;
 
-	//If the node to remove is at the end
-	//Do this to prevent always locking as it can only expand
-	if(start->next==NULL){
-		//Lock the other side
-		queue_lockEnd(this);
-		//Update the end only if next is still null (Prevent false positives)
-		if(start->next==NULL)this->end=this->DUMMY;
-		queue_unlockEnd(this);
+		//If the node to remove is at the end
+		//Do this to prevent always locking as it can only expand
+		if(start->next==NULL){
+			//Lock the other side
+			queue_lockEnd(this);
+			//Update the end only if next is still null (Prevent false positives)
+			if(start->next==NULL)this->end=this->DUMMY;
+			queue_unlockEnd(this);
+		}
 	}
 	queue_unlockFront(this);
+	if(start==NULL)return NULL;
 	//Extract the data
 	void* data=start->data;
 	//Free the node
