@@ -97,4 +97,6 @@ extern bool halt;
  */
 extern struct sizeWrapper* cypherText;
 
+extern pthread_cond_t end;
+
 #endif

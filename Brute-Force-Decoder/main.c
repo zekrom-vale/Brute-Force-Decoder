@@ -31,6 +31,8 @@ bool halt=false;
  */
 struct sizeWrapper* cypherText;
 
+pthread_cond_t end;
+
 /**
  * Creates new threads
  * @param arr the array of pthreads to create
@@ -104,5 +106,10 @@ int main(){
 	pthread_attr_destroy(&threadAttr);
 
 	print_id(TRD, "Ending");
-	pthread_exit(0);
+	pthread_mutex_t endM=PTHREAD_MUTEX_INITIALIZER;
+	pthread_mutex_lock(&endM);
+	while(!halt)pthread_cond_wait(&end, &endM);
+	pthread_mutex_unlock(&endM);
+
+	return 0;
 }

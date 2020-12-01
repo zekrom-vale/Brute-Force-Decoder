@@ -29,7 +29,7 @@ bool validator_validator(struct keyTextWrap* keyText){
 		return false;
 	}
 	//Find the word
-	return regexec(&wordRegex, txt, 1, NULL, 0)==REG_NOMATCH;
+	return regexec(&wordRegex, txt, 1, NULL, 0)!=REG_NOMATCH;
 }
 
 void* validator_main(void* v){
@@ -54,7 +54,8 @@ void* validator_main(void* v){
 		if(validator_validator(keyText)){
 			halt=true;
 			print(TRD, keyText);
-			exit(0);
+			//End the program
+			pthread_cond_signal(&end);
 		}
 		//Clean up
 		free(keyText->text->arr);
