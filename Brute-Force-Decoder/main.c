@@ -104,5 +104,5 @@ int main(){
 	pthread_attr_destroy(&threadAttr);
 
 	print_id(TRD, "Ending");
-	return 0;
+	thrd_exit(0);
 }
