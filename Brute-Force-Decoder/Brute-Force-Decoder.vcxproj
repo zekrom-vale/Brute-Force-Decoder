@@ -64,6 +64,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <ConfigurationType>Application</ConfigurationType>
+    <RemoteRootDir>~/projects</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -86,11 +87,14 @@
     <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
     <RemoteCleanCommandLine>make clean</RemoteCleanCommandLine>
     <RemoteBuildOutputs>/home/zekrom/projects/Brute-Force-Decoder/bruteForceDecoder.o</RemoteBuildOutputs>
-    <OutDir>/home/zekrom/projects/Brute-Force-Decoder</OutDir>
-    <IntDir>/home/zekrom/projects/Brute-Force-Decoder</IntDir>
+    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <RemoteCCompileToolExe>gcc</RemoteCCompileToolExe>
     <RemoteCppCompileToolExe>gcc</RemoteCppCompileToolExe>
     <RemoteLdToolExe>gcc</RemoteLdToolExe>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetExt>.o</TargetExt>
+    <RemoteDeployDir>$(RemoteProjectDir)</RemoteDeployDir>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="Decoder\decoder.c" />
@@ -122,9 +126,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
+      <Verbose>true</Verbose>
     </ClCompile>
     <Link>
       <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(TargetPath)</OutputFile>
+      <ShowProgress>true</ShowProgress>
+      <VerboseOutput>true</VerboseOutput>
+      <Trace>true</Trace>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
