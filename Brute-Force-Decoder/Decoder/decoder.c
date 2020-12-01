@@ -1,6 +1,9 @@
 #include "decoder.h"
 #define TRD "Decoder"
 
+void rc4( byte* key,  int key_len,
+	char* buff, int len);
+
 /**
  * Copies the cypher text and sets up the size wrapper
  * Also, sets the proper null terminator for strings `\0`
@@ -24,18 +27,8 @@ struct sizeWrapper* decode_decode(struct sizeWrapper* wrp){
 	byte* key=wrp->arr;
 	size_t keySize=wrp->size;
 	struct sizeWrapper* txt=decode_copy();
-	//Access with
-	//txt->arr
-	//txt->size (This now includes `\0`)
 	
-	//Literaly just apply the XOR to each character
-	//EXCEPT the last one, that must be `\0`
-	//You should be able to set that after if you want to
-		//But update the one above
-
-	//Decode
-
-
+	rc4(wrp->arr, wrp->size, txt->arr, txt->size);
 
 	return txt;
 }
@@ -74,4 +67,42 @@ void* decoder_main(void* v){
 	//Standard thread end
 	//if(args)free(args);
 	return NULL;
+}
+
+void swap( byte *p1, byte *p2){
+	byte t = *p1;
+	*p1 = *p2;
+	*p2 = t;
+}
+
+void rc4_init( byte *key, int key_len, byte s[], byte t[]){
+	int   i,j=0;
+	char* k=key;
+	//Initial values of both vectors
+	for (i=0;i<256;i++){
+		s[i] = i;
+		t[i] = k[i%key_len];
+	}
+	//Initial permutation 
+	for (i=0;i<256;i++){
+		j = (j + s[i] + t[i])%256;
+		swap(&s[i],&s[j]);
+	}
+}
+
+void rc4( byte* key,  int key_len, char* buff, int len){
+	byte s[256];
+	byte t[256];
+	rc4_init(key,key_len, s, t);
+	//process a byte at a time
+	unsigned long t1=0,t2=0;
+	for (int i=0;i<len;i++){     
+		t1 = (t1 + 1)%256;
+		t2 = (t2 + s[t1])%256;
+		swap(&s[t1],&s[t2]);
+		byte val = (s[t1] + s[t2])%256;
+		byte out = *buff ^ val;
+		*buff=out;        
+		buff++;        
+	}
 }
