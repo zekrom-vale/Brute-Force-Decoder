@@ -1,5 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
+#define NO_STDIO_REDIRECT
 #include <stdbool.h>
 
 #ifndef __USE_XOPEN2K8

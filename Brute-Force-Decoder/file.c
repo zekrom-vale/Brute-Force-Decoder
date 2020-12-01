@@ -3,6 +3,7 @@
 char* file_readAllCore(char* file, bool addNull, size_t* size){
 	//Open the file in read bianary mode
 	FILE *f = fopen(file, "rb");
+	assert(f);
 	//Seek to the end
 	assert(!fseek(f, 0, SEEK_END));
 	//Get the last character postion

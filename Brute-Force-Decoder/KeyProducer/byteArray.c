@@ -8,7 +8,7 @@
 bool byte_array_inc(byte* arr, int inc, size_t size){
 	assert(inc>0); //There is no support for decrementing
 	//Add the value
-	int val=((int)*arr)+(int)inc;
+	int val=((int)*arr)+inc;
 	//If there is overflow roll it over
 	if(val<=MAX){
 		*arr=val;

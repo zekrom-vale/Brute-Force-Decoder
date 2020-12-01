@@ -158,7 +158,7 @@ void* queue_pop(struct queue* this){
  */
 struct queue* queue_init(){
 	//No need to lock as nothing else has access to the queue
-	struct queue* q=malloc(sizeof(struct queue*));
+	struct queue* q=malloc(sizeof(struct queue));
 	q->DUMMY=malloc(sizeof(struct node));
 	q->DUMMY->data=NULL;
 	q->DUMMY->next=NULL;

@@ -26,7 +26,15 @@ void* key_main(void* v){
 
 	//Create key used to ccreate all other keys
 	byte arr[args->size];
+	for(int i=1; i<args->size; i++){
+		arr[i]=0;
+	}
 	arr[0]=args->start;
+	char* buff=malloc(sizeof(char)*3*args->start+1);
+	for(int i=0; i<args->size; i++){
+		sprintf(buff, "%X ", arr[i]);
+	}
+	printf("0x%s\n", buff);
 	//Increment then push to the queue
 	//Only if halt is false and inc does not run out
 	while(!halt&&byte_array_inc(arr, args->num, args->size)){

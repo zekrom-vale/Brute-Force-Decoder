@@ -85,7 +85,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
     <RemoteCleanCommandLine>make clean</RemoteCleanCommandLine>
-    <RemoteBuildOutputs>~/projects/Brute-Force-Decoder/bruteForceDecoder.o</RemoteBuildOutputs>
+    <RemoteBuildOutputs>/home/zekrom/projects/Brute-Force-Decoder/bruteForceDecoder.o</RemoteBuildOutputs>
+    <OutDir>/home/zekrom/projects/Brute-Force-Decoder</OutDir>
+    <IntDir>/home/zekrom/projects/Brute-Force-Decoder</IntDir>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="Decoder\decoder.c" />

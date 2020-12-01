@@ -42,7 +42,7 @@ struct sizeWrapper* decode_decode(struct sizeWrapper* wrp){
 
 void* decoder_main(void* v){
 	//Standard thread start
-	struct decodeArgs* args=v;
+	//decodeArgs* args=v;
 
 	print_id(TRD, "Starting Thread");
 
@@ -72,6 +72,6 @@ void* decoder_main(void* v){
 	print_id(TRD, "Ending Thread");
 
 	//Standard thread end
-	if(args)free(args);
+	//if(args)free(args);
 	return NULL;
 }

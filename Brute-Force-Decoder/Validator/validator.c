@@ -28,7 +28,7 @@ bool validator_validator(struct keyTextWrap* keyText){
 
 void* validator_main(void* v){
 	//Standard thread start
-	struct decodeArgs* args=v;
+	//struct decodeArgs* args=v;
 
 	print_id(TRD, "Starting Thread");
 
@@ -59,6 +59,6 @@ void* validator_main(void* v){
 	print_id(TRD, "Ending Thread");
 
 	//Standard thread end
-	if(args)free(args);
+	//if(args)free(args);
 	return NULL;
 }

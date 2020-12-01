@@ -18,7 +18,7 @@ void print(char* TRD, struct keyTextWrap* keyText){
 }
 
 void print_core(char* TRD, char* txt){
-	if(TRD==NULL)fprintf(OUT, "%4d %20s ", 1, "Main");
-	else fprintf(OUT, "%4lu %20s ", pthread_self(), TRD);
+	if(TRD==NULL)fprintf(OUT, "%16d %20s ", 1, "Main");
+	else fprintf(OUT, "%16lu %20s ", pthread_self(), TRD);
 	fprintf(OUT, "%s\n", txt);
 }

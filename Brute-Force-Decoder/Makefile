@@ -1,7 +1,7 @@
 #Set the shell to bash because it has more features
 shell := /bin/bash
 
-gcc=gcc -Wall
+gcc=gcc -Wall -fthreadsafe-statics
 lib=-lpthread
 bin=bin/
 
@@ -9,10 +9,10 @@ bin=bin/
 ifdef $(dbg)
 	gcc=$(gcc) -g
 	Run=gdb
-	lvl=-Og
+	lvl=-O0
 else
 	Run=
-	lvl=-O3
+	lvl=-O0
 endif
 
 RunEnd=
