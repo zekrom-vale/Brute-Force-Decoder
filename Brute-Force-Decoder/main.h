@@ -10,8 +10,6 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdbool.h>
-#include <threads.h>
-#include <unistd.h>
 
 //Defines the ammount of threads to create
 //Can pass -DN_KEYS=2 -DN_DECS=6 -DN_VALS=12 to set values
