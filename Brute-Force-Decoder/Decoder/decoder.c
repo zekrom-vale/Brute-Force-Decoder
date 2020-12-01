@@ -47,6 +47,8 @@ void* decoder_main(void* v){
 #if KEY_MAX!=0
 		sem_post(&semKeyMax);
 #endif
+
+		if(wrp==NULL)continue;
 		//End fetch
 		
 		struct keyTextWrap* keyTextWrap=malloc(sizeof(struct keyTextWrap));

@@ -48,6 +48,7 @@ void* validator_main(void* v){
 #if TEXT_MAX!=0
 		sem_post(&semTextMax);
 #endif
+		if(keyText==NULL)continue;
 		//End retreve
 		
 		if(validator_validator(keyText)){
