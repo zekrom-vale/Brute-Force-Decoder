@@ -18,12 +18,17 @@ bool validator_validator(struct keyTextWrap* keyText){
 	byte* key=keyText->key->arr;
 	size_t keySize=keyText->key->size;
 
-	if(txtSize!=strlen(txt))return false;
+	if(txtSize-1!=strlen(txt)){
+		return false;
+	}
 
 	//Find invalid characters
-	if(regexec(&invalRegex, txt, 1, NULL, 0)!=REG_NOMATCH)return false;
+	int x=regexec(&invalRegex, txt, 1, NULL, 0);
+	if(x!=REG_NOMATCH){
+		return false;
+	}
 	//Find the word
-	return regexec(&wordRegex, txt, 1, NULL, 0)!=REG_NOMATCH;
+	return regexec(&wordRegex, txt, 1, NULL, 0)==REG_NOMATCH;
 }
 
 void* validator_main(void* v){

@@ -19,16 +19,16 @@
 
 #if EN_ONLY
 #ifndef NON_EN
-#define NON_EN "\\xBF-\\xFF"
+#define NON_EN "\xBF-\xFF"
 #endif
 #else
 #ifndef NON_EN
-#define NIN_EN ""
+#define NON_EN ""
 #endif
 #endif
 
 #ifndef INVAL_REG
-#define INVAL_REG "[\\x01-\\x08\\x0B\\x0E-\\x1F0x7F\\x80-\\x9F"NON_EN"]"
+#define INVAL_REG "[\x01-\x08\x0B\x0E-\x1F\x7F-\x9F"NON_EN"]"
 #endif
 
 void validator_init();
