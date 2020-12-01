@@ -10,12 +10,12 @@ struct sizeWrapper* decode_copy(){
 	struct sizeWrapper* txt=malloc(sizeof(struct sizeWrapper));
 	size_t textSize=cypherText->size;
 	//Copy the text so we can modify the text itself
-	char* text=calloc(textSize+1, sizeof(byte));
+	char* text=calloc(textSize-1, sizeof(byte));
 	memcpy(text, cypherText->arr, textSize);
 	//Add the `\0`
-	text[textSize]=0;
+	text[textSize-1]='\0';
 	txt->arr=text;
-	txt->size=textSize; //strlen does not inclue `\0`
+	txt->size=textSize-1; //strlen does not inclue `\0`
 	return txt;
 }
 
