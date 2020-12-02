@@ -9,10 +9,10 @@ bin=bin/
 ifdef $(dbg)
 	gcc=$(gcc) -g
 	Run=gdb
-	lvl=-O0
+	lvl=-Og
 else
 	Run=
-	lvl=-O0
+	lvl=-O3
 endif
 
 RunEnd=
@@ -44,17 +44,20 @@ hfiles = $(foreach file, $(files), $(file).h) \
 Util/config.h \
 Util/size.h
 
-all: build
+all: $(ofiles) link
 
 build: $(cfiles) $(hfiles)
 	$(gcc) $(cfiles) -o $(out) $(option) $(lib)
 
-run: build
+run: link
+	$(Run) ./$(out) $(RunEnd)
+
+runAlt:build
 	$(Run) ./$(out) $(RunEnd)
 
 clean:
 	rm $(out)
-	#rm $(ofiles)
+	rm $(ofiles)
 
 
 $(bin)%$(obj): %.c $(hfiles)
