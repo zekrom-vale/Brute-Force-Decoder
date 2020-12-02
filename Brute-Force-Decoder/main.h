@@ -17,21 +17,21 @@
 /** 
  * The ammount of key producers to create
  */
-#define N_KEYS 1
+#define N_KEYS 5
 #endif
 
 #ifndef N_DECS
 /** 
  * The ammount of decoders to create
  */
-#define N_DECS 3
+#define N_DECS 5
 #endif
 
 #ifndef N_VALS
 /** 
  * The ammount of validators to create
  */
-#define N_VALS 6
+#define N_VALS 7
 #endif
 
 #ifndef KEY_SIZE

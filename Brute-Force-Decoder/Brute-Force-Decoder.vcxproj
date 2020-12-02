@@ -130,6 +130,7 @@
     <ClCompile>
       <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
       <Verbose>true</Verbose>
+      <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
       <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
