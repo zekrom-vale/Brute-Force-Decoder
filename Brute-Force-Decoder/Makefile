@@ -6,8 +6,8 @@ lib=-lpthread
 bin=bin/
 
 #Set up debug configuration
-ifdef $(dbg)
-	gcc=$(gcc) -g
+ifdef dbg
+	gcc=gcc -Wall -g
 	Run=gdb
 	lvl=-Og
 else
