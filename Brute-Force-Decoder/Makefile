@@ -46,22 +46,31 @@ Util/size.h
 
 all: $(ofiles) link
 
-run: link
-	$(Run) ./$(out) $(RunEnd)
-
-clean:
-	rm $(out)
-	rm $(ofiles)
-
-
-$(bin)%$(obj): %.c $(hfiles)
+$(bin)%$(obj): %.c $(hfiles) %.h
 	mkdir -p $@
 	rmdir $@
 	$(gcc) $< -c -o $@ $(option) $(lib)
 
+#Test
+testOut=test$(obj)
+$(bin)Test/queueTest$(obj): Test/queueTest.c $(hfiles)
+	mkdir -p $@
+	rmdir $@
+	$(gcc) $< -c -o $@ $(option) $(lib)
+
+test: $(bin)queue$(obj) $(bin)Test/queueTest$(obj) $(bin)Util/mutex$(obj)
+	$(gcc) $^ -o $(testOut) $(option) $(lib)
+
 link: $(ofiles)
 	$(gcc) $^ -o $(out) $(option) $(lib)
 
+run: link
+	$(Run) ./$(out) $(RunEnd)
+
+#Clean
+clean:
+	rm $(out)
+	rm $(ofiles)
 
 #Legacy
 build: $(cfiles) $(hfiles)

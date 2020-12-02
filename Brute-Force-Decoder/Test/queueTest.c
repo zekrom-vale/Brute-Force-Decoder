@@ -1,5 +1,8 @@
 #include "../queue.h"
 #include <pthread.h>
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /** 
  * The test strings
@@ -39,7 +42,7 @@ char** strs[TRD];
  * @param val the val to test
  */
 void assert_insert(struct queue* q, char* val){
-	queue_push(q, str[i]);
+	queue_push(q, val);
 	assert(q->end->data==val);//Yes comparing pointers
 	assert(q->end->next==NULL);
 }
@@ -52,7 +55,7 @@ void test_queue(){
 	struct queue* q=queue_init();
 
 	//Loop to ensure clearing works
-	for(int j=0; j<4; j++){
+	for(int j=0; j<2; j++){
 		//Add strings
 		for(int i=0; i<size; i++){
 			assert_insert(q, str[i]);
@@ -72,12 +75,6 @@ void test_queue(){
 			if(i<size-1)assert(n->next->data==str[i+1]);
 			else assert(n->next==NULL);
 		}
-		//Add a random string to test things
-		if(i>2)assert(queue_pop(q)==NULL);
-		else assert(queue_pop(q)==str[j-1]);
-		if(i>=2){
-			assert_insert(q, str[j]);
-		}
 	}
 
 	queue_destroy(q);
@@ -87,13 +84,13 @@ void* test_lokedQueue_push(void* q){
 	//Create a space to store the copy 
 	char** cpy=malloc(size*sizeof(char));
 	//Get the id of the array
-	char* id=malloc(10*sizeof(char));
-	sprintf(id, "%d", pthread_self());
+	char* id=malloc(20*sizeof(char));
+	sprintf(id, "%X", pthread_self());
 
 	//Now copy and push
 	for(int i=0; i<size; i++){
 		//Copy
-		cpy[i]=malloc(strlen(str[i])+10);
+		cpy[i]=malloc(strlen(str[i])+30);
 		strcpy(cpy[i], str[i]);
 		//Append
 		strcat(cpy[i], id);
@@ -178,20 +175,20 @@ void test_lockedQueue_seq(){
 	struct queue* q=queue_init();
 	//Create the threads to push the values in an unknown order
 	for(int i=0; i<TRD; i++){
-		pthread_create(&(trd+i), NULL, test_lokedQueue_push, q);
+		pthread_create(&(trd[i]), NULL, test_lokedQueue_push, (void*)q);
 	}
 	//Wait to for the threads to return
 	for(int i=0; i<TRD; i++){
 		//Save the return to the strs array
-		pthread_join(&(trd+i), strs[i]);
+		pthread_join((trd[i]), (void*)strs[i]);
 	}
 	//Create the threads to pop the values in an unknown order
 	for(int i=0; i<TRD; i++){
-		pthread_create(&(trd+i), NULL, test_lockedQueue_pop, q);
+		pthread_create(&(trd[i]), NULL, test_lockedQueue_pop, (void*)q);
 	}
 	//Wait for it to return
 	for(int i=0; i<TRD; i++){
-		pthread_join(&(trd+i), NULL);
+		pthread_join((trd[i]), NULL);
 	}
 
 	//Verify everything was removed
@@ -215,19 +212,19 @@ void test_lockedQueue_rand(){
 	struct queue* q=queue_init();
 	//Create the push threads
 	for(int i=0; i<TRD; i++){
-		pthread_create(&(trd_push+i), NULL, test_lokedQueue_push, q);
+		pthread_create(&(trd_push[i]), NULL, test_lokedQueue_push, q);
 	}
 	//Create the pop threads without waiting for the other threads to finish
 	for(int i=0; i<TRD; i++){
-		pthread_create(&(trd_pop+i), NULL, test_lokedQueue_pop_nl, q);
+		pthread_create(&(trd_pop[i]), NULL, test_lokedQueue_pop_nl, q);
 	}
 	//Wait for the threads to end
 	for(int i=0; i<TRD; i++){
 		//Save the nodes added into strs
-		pthread_join(&(trd_push+i), strs[i]);
+		pthread_join((trd_push[i]), (void*)strs[i]);
 	}
 	for(int i=0; i<TRD; i++){
-		pthread_join(&(trd_pop+i), NULL);
+		pthread_join((trd_pop[i]), NULL);
 	}
 	//Finish up collecting the extra nodes
 	char* val=queue_pop(q);
