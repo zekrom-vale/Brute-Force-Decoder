@@ -25,7 +25,7 @@ const char* str[]={
 };
 
 #include <string.h>
-#define TRD 6
+#define TRD 1
 
 /** 
  * Size of the string array
@@ -49,22 +49,24 @@ void assert_insert(struct queue* q, char* val){
 
 void* test_lokedQueue_push(void* q){
 	//Create a space to store the copy 
-	char** cpy=malloc(size*sizeof(char));
+	char** cpy=(char**)malloc(size*sizeof(char*));
 	//Get the id of the array
 	char* id=malloc(20*sizeof(char));
 	sprintf(id, "%lX", pthread_self());
 
 	//Now copy and push
 	for(int i=0; i<size; i++){
+		printf("%lX : Copy %d\n", pthread_self(), i);
 		//Copy
-		cpy[i]=malloc(strlen(str[i])+30);
-		strcpy(cpy[i], str[i]);
+		char* loc=malloc(1000*sizeof(char));
+		*(cpy+i)=loc;
+		strcpy(loc, *(str+i));
 		//Append
-		strcat(cpy[i], id);
+		strcat(loc, id);
 		//Add to the queue
-		queue_push(q, cpy[i]);
+		queue_push(q, loc);
 	}
-	printf("%lX : Done coppying", pthread_self());
+	printf("%lX : Done coppying\n", pthread_self());
 	return cpy;
 }
 
@@ -76,14 +78,15 @@ void* test_lokedQueue_push(void* q){
 void test_lookup(char* c){
 	//Loop through each thread strings as they can mix up
 	for(int i=0; i<TRD; i++){
-		char** s=strs[i];
+		char** s=*(strs+i);
 		//Loop for each in the thread array
 		for(int j=0; j<size; j++){
 			//Test if it points to the same location
-			if(s[j]==c){
+			if(*(s+j)==c){
 				//Free and set it to null
-				free(s[j]);
-				s[j]=NULL;
+				printf("Found match");
+				free(c);
+				*(s+j)=NULL;
 				return;
 			}
 		}
@@ -96,13 +99,15 @@ void test_lookup(char* c){
  * Does not look up the string in the strs array
  */
 void* test_lokedQueue_pop_nl(void* v){
+	struct queue* q=v;
 	//Loop for 2x as we may pop too quickely
 	//Sure suncronization is posible but that takes time
 	for(int i=0; i<size*2; i++){
+		printf("%lX : Remove %d\n", pthread_self(), i);
 		//Pop the data
-		char* c=queue_pop(v);
+		char* c=queue_pop(q);
 		//If not NULL free it
-		if(c)free(c);
+		if(c!=NULL)free(c);
 	}
 	printf("%lX : Done popping", pthread_self());
 	return NULL;
@@ -112,11 +117,14 @@ void* test_lokedQueue_pop_nl(void* v){
  * Pop and verify the data was removed only once
  */
 void* test_lockedQueue_pop(void* v){
+	struct queue* q=v;
+	printf("poping\n");
 	for(int i=0; i<size; i++){
-		char* c=queue_pop(v);
+		char* c=queue_pop(q);
+		printf("%lX : Remove %d %s\n", pthread_self(), i, c);
 		assert(c!=NULL);
 		test_lookup(c);
-		free(c);
+		if(c!=NULL)free(c);
 	}
 	printf("%lX : Done Popping", pthread_self());
 	return NULL;
@@ -127,9 +135,9 @@ void* test_lockedQueue_pop(void* v){
  */
 void test_lockedQueue_assertend(){
 	for(int i=0; i<TRD; i++){
-		char** s=strs[i];
+		char** s=*(strs+i);
 		for(int j=0; j<size; j++){
-			assert(s[j]==NULL);
+			assert(*(s+j)==NULL);
 		}
 	}
 }
@@ -151,7 +159,7 @@ void test_lockedQueue_seq(){
 	//Wait to for the threads to return
 	for(int i=0; i<TRD; i++){
 		//Save the return to the strs array
-		pthread_join((trd[i]), (void*)strs[i]);
+		pthread_join((trd[i]), (void*)(strs[i]));
 	}
 	printf("Passed Creation\n");
 	//Create the threads to pop the values in an unknown order
@@ -228,5 +236,6 @@ int main(){
 		printf("================================\n");
 		test_lockedQueue_rand();
 		printf("Pass Random Test\n");
+		printf("================================\n");
 	}
 }
