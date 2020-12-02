@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include "../Print/print.h"
 
+#define VALEXT false
+
 #ifndef WORD_REG
 #define WORD_REG "Russia"
 #endif

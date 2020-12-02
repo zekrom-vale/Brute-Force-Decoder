@@ -29,7 +29,11 @@ bool validator_validator(struct keyTextWrap* keyText){
 		return false;
 	}
 	//Find the word
+#if VALEXT
 	return regexec(&wordRegex, txt, 1, NULL, 0)!=REG_NOMATCH;
+#else
+	return true;
+#endif
 }
 
 void* validator_main(void* v){
