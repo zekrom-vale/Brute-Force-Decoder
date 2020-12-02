@@ -115,20 +115,16 @@ void queue_push(struct queue* this, void* data){
 	n->data=data;
 	n->next=NULL;
 
-	bool fl=false;
+	queue_lockFront(this);
 	if(this->front->next==NULL){
-		queue_lockFront(this);
-		if(this->front->next==NULL){
-			this->front->next=n;
-		};
-		fl=true;
-	}
+		this->front->next=n;
+	};
 	//Add to the end
 	queue_lockEnd(this);
 	this->end->next=n;
 	this->end=n;
 	queue_unlockEnd(this);
-	if(fl)queue_unlockFront(this);
+	queue_unlockFront(this);
 }
 
 /**
