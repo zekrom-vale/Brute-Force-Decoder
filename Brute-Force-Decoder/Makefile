@@ -46,20 +46,27 @@ Util/size.h
 
 all: $(ofiles) link
 
+#Patterns
 $(bin)%$(obj): %.c $(hfiles) %.h
-	mkdir -p $@
-	rmdir $@
+	mkdir -p $@ || true
+	rmdir $@ || true
+	$(gcc) $< -c -o $@ $(option) $(lib)
+
+$(bin)%$(obj): %.c $(hfiles)
+	mkdir -p $@ || true
+	rmdir $@ || true
 	$(gcc) $< -c -o $@ $(option) $(lib)
 
 #Test
-testOut=test$(obj)
-$(bin)Test/queueTest$(obj): Test/queueTest.c $(hfiles)
-	mkdir -p $@
-	rmdir $@
-	$(gcc) $< -c -o $@ $(option) $(lib)
+testOut=test
 
-test: $(bin)queue$(obj) $(bin)Test/queueTest$(obj) $(bin)Util/mutex$(obj)
-	$(gcc) $^ -o $(testOut) $(option) $(lib)
+test1: $(bin)queue$(obj) $(bin)Test/queueTest$(obj) $(bin)Util/mutex$(obj)
+	$(gcc) $^ -o $(testOut)1$(obj) $(option) $(lib)
+
+test2: $(bin)queue$(obj) $(bin)Test/queueCritSect$(obj) $(bin)Util/mutex$(obj)
+	$(gcc) $^ -o $(testOut)2$(obj) $(option) $(lib)
+
+test: test1 test2
 
 link: $(ofiles)
 	$(gcc) $^ -o $(out) $(option) $(lib)
