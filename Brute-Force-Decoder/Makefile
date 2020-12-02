@@ -1,7 +1,7 @@
 #Set the shell to bash because it has more features
 shell := /bin/bash
 
-gcc=gcc -Wall -fthreadsafe-statics
+gcc=gcc -Wall
 lib=-lpthread
 bin=bin/
 
@@ -46,13 +46,7 @@ Util/size.h
 
 all: $(ofiles) link
 
-build: $(cfiles) $(hfiles)
-	$(gcc) $(cfiles) -o $(out) $(option) $(lib)
-
 run: link
-	$(Run) ./$(out) $(RunEnd)
-
-runAlt:build
 	$(Run) ./$(out) $(RunEnd)
 
 clean:
@@ -61,7 +55,17 @@ clean:
 
 
 $(bin)%$(obj): %.c $(hfiles)
+	mkdir -p $@
+	rmdir $@
 	$(gcc) $< -c -o $@ $(option) $(lib)
 
 link: $(ofiles)
 	$(gcc) $^ -o $(out) $(option) $(lib)
+
+
+#Legacy
+build: $(cfiles) $(hfiles)
+	$(gcc) $(cfiles) -o $(out) $(option) $(lib)
+
+runAlt:build
+	$(Run) ./$(out) $(RunEnd)
