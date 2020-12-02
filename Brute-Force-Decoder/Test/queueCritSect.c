@@ -52,7 +52,7 @@ void* test_lokedQueue_push(void* q){
 	char** cpy=malloc(size*sizeof(char));
 	//Get the id of the array
 	char* id=malloc(20*sizeof(char));
-	sprintf(id, "%X", pthread_self());
+	sprintf(id, "%lX", pthread_self());
 
 	//Now copy and push
 	for(int i=0; i<size; i++){
@@ -64,6 +64,7 @@ void* test_lokedQueue_push(void* q){
 		//Add to the queue
 		queue_push(q, cpy[i]);
 	}
+	printf("%lX : Done coppying", pthread_self());
 	return cpy;
 }
 
@@ -103,6 +104,7 @@ void* test_lokedQueue_pop_nl(void* v){
 		//If not NULL free it
 		if(c)free(c);
 	}
+	printf("%lX : Done popping", pthread_self());
 	return NULL;
 }
 
@@ -116,6 +118,7 @@ void* test_lockedQueue_pop(void* v){
 		test_lookup(c);
 		free(c);
 	}
+	printf("%lX : Done Popping", pthread_self());
 	return NULL;
 }
 
@@ -144,22 +147,30 @@ void test_lockedQueue_seq(){
 	for(int i=0; i<TRD; i++){
 		pthread_create(&(trd[i]), NULL, test_lokedQueue_push, (void*)q);
 	}
+	printf("Running Threads to push\n");
 	//Wait to for the threads to return
 	for(int i=0; i<TRD; i++){
 		//Save the return to the strs array
 		pthread_join((trd[i]), (void*)strs[i]);
 	}
+	printf("Passed Creation\n");
 	//Create the threads to pop the values in an unknown order
 	for(int i=0; i<TRD; i++){
 		pthread_create(&(trd[i]), NULL, test_lockedQueue_pop, (void*)q);
 	}
+	printf("Running Threads to pop\n");
+
 	//Wait for it to return
 	for(int i=0; i<TRD; i++){
 		pthread_join((trd[i]), NULL);
 	}
 
+	printf("Running End\n");
+
 	//Verify everything was removed
 	test_lockedQueue_assertend();
+
+	printf("Destroying queue\n");
 
 	//Destroy the queue
 	queue_destroy(q);
@@ -185,6 +196,7 @@ void test_lockedQueue_rand(){
 	for(int i=0; i<TRD; i++){
 		pthread_create(&(trd_pop[i]), NULL, test_lokedQueue_pop_nl, q);
 	}
+	printf("Created Threads\n");
 	//Wait for the threads to end
 	for(int i=0; i<TRD; i++){
 		//Save the nodes added into strs
@@ -194,12 +206,15 @@ void test_lockedQueue_rand(){
 		pthread_join((trd_pop[i]), NULL);
 	}
 	//Finish up collecting the extra nodes
+	printf("Cleaning Up\n");
 	char* val=queue_pop(q);
 	while(val!=NULL){
 		free(val);
 		val=queue_pop(q);
 	}
+	printf("Running End\n");
 	test_lockedQueue_assertend();
+	printf("Destroying queue\n");
 	queue_destroy(q);
 }
 
@@ -209,6 +224,9 @@ int main(){
 	//Need to loop as there is no gurentee that it will be the same every time it is run
 	for(int i=0; i<TEST; i++){
 		test_lockedQueue_seq();
+		printf("Pass Sequental Test\n");
+		printf("================================\n");
 		test_lockedQueue_rand();
+		printf("Pass Random Test\n");
 	}
 }

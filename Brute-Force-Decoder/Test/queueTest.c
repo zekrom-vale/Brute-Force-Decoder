@@ -52,8 +52,10 @@ void test_queue(){
 	for(int j=0; j<2; j++){
 		//Add strings
 		for(int i=0; i<size; i++){
+			printf("Added \"%s\"\n", str[i]);
 			assert_insert(q, str[i]);
 		}
+		printf("\n");
 		//Remove strings
 		for(int i=0; i<size; i++){
 			struct node* n=q->front->next;
@@ -64,13 +66,15 @@ void test_queue(){
 			if(i<size-1)assert(n->next->data==str[i+1]);
 			else assert(n->next==NULL);
 			assert(str[i]==queue_pop(q));
+			printf("Removed \"%s\"\n", str[i]);
 			n=q->front;
 			//Test if the shift worked
 			if(i<size-1)assert(n->next->data==str[i+1]);
 			else assert(n->next==NULL);
 		}
+		printf("----------------\n");
 	}
-
+	printf("Pass\n");
 	queue_destroy(q);
 }
 

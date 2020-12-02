@@ -107,6 +107,9 @@
     <Text Include="Test\queueTest.c">
       <FileType>CCode</FileType>
     </Text>
+    <Text Include="Test\queueCritSect.c">
+      <FileType>CppCode</FileType>
+    </Text>
     <ClCompile Include="Util\mutex.c" />
     <ClCompile Include="Validator\validator.c" />
   </ItemGroup>
